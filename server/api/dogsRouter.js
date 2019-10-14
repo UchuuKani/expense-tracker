@@ -4,9 +4,9 @@ const client = require("../db");
 router.get("/", async (req, res, next) => {
   try {
     const query = "SELECT dogs.* FROM dogs";
-    const data = await client.query(query);
+    const {rows} = await client.query(query);
 
-    res.json(data.rows);
+    res.json(rows);
   } catch(err) {
     next(err);
   }
@@ -15,24 +15,31 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const query = "SELECT dogs.* FROM dogs WHERE dogs.id = $1";
-    const data = await client.query(query, [req.params.id]);
+    const {rows} = await client.query(query, [req.params.id]);
 
-    if (!data.rows.length) {
+    if (!rows.length) {
       const new404 = new Error("Page not found");
       new404.status = 404;
       throw new404;
     }
 
-    res.json(data.rows[0]);
+    res.json(rows[0]);
   } catch(err) {
     next(err);
   }
 });
 
-router.post("/", (req, res, next) => {
-  console.log("req.body is alive", req.body);
+router.post("/", async (req, res, next) => {
+  try {
+    const {ownerid, name, breed, age} = req.body
+    const query = "INSERT INTO dogs (ownerid, name, breed, age) VALUES ($1, $2, $3, $4) RETURNING *";
 
-  res.sendStatus(201);
+    const {rows} = await client.query(query, [ownerid, name, breed, age]);
+
+    res.status(201).send(rows[0]);
+  } catch(err) {
+    next(err);
+  }
 });
 
 module.exports = router;

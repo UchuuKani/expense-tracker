@@ -3,14 +3,12 @@ const client = require("../db");
 
 router.get("/", async (req, res, next) => {
   try {
-    // const query = "SELECT users.*, dogs.name AS dogName, dogs.breed, dogs.age FROM users LEFT JOIN dogs ON users.id = dogs.ownerId";
-
-    const query = "SELECT users.*, pets FROM users LEFT JOIN (SELECT dogs.*) AS pets ON users.id = pets.ownerId";
+    const query = "SELECT users.* FROM users";
 
 
-    const data = await client.query(query);
+    const {rows} = await client.query(query);
 
-    res.json(data.rows);
+    res.json(rows);
   } catch(err) {
     next(err);
   }
@@ -18,7 +16,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:id", async (req, res, next) => {
   try {
-    const query = "SELECT users.*, dogs.* AS dogs FROM users JOIN dogs ON users.id = dogs.ownerId where users.id = $1";
+    const query = "SELECT users.* FROM users WHERE users.id = $1";
     const data = await client.query(query, [req.params.id]);
 
     if (!data.rows.length) {
@@ -33,10 +31,17 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/", (req, res, next) => {
-  console.log("req.body is alive", req.body);
+router.post("/", async (req, res, next) => {
+  try {
+    const {name, email} = req.body
+    const query = "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *";
 
-  res.sendStatus(201);
+    const {rows} = await client.query(query, [name, email]);
+
+    res.status(201).send(rows[0]);
+  } catch(err) {
+    next(err);
+  }
 });
 
 module.exports = router;

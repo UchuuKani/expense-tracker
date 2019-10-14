@@ -9,22 +9,19 @@ class Toggle extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  componentDidUpdate() {
-    this.setState({count: this.state.count + 1});
-  }
+  // componentDidUpdate() { //causes infinite loop of setStates
+  //   this.setState({count: this.state.count + 1});
+  // }
 
   handleClick() {
-    // this.setState(state => ({
-    //   isToggleOn: !state.isToggleOn
-    // }));
-
-    this.setState({
-      isToggleOn: !this.state.isToggleOn
-    })
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn,
+      count: prevState.count + 1
+    }));
   }
 
   render() {
-    console.log(this.state.count);
+    console.log(this.state.count, this.state.isToggleOn);
     return (
       <button onClick={this.handleClick}>
         {this.state.isToggleOn ? 'ON' : 'OFF'}
