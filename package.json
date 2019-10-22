@@ -15,7 +15,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "node-env-run server --exec nodemon | pino-colada",
-    "dev": "run-p server start"
+    "dev": "run-p server start",
+    "seed": "psql -d bill-tracker -a -f ./seed.sql"
   },
   "eslintConfig": {
     "extends": "react-app"
