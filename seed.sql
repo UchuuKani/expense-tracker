@@ -20,6 +20,7 @@ CREATE TABLE tags (
 );
 
 CREATE TABLE tags_transactions (
+  tags_transactionsId SERIAL PRIMARY KEY,
   transactionId INTEGER REFERENCES transactions(transactionId) NOT NULL,
   tagId INTEGER REFERENCES tags(tagId) NOT NULL
 );

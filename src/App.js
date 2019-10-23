@@ -23,7 +23,7 @@ function App() {
   console.log("one render")
   return (
     <div className="App">
-      <h1>Pet Store App or Something</h1>
+      <h1>Bill Tracker</h1>
       <Toggle />
       {
         users.length ?
