@@ -40,6 +40,18 @@ router.get("/:id/transactions", async (req, res, next) => {
   }
 })
 
+//route to grab specific transaction
+router.get("/:id/transactions/:transactionId", async (req, res, next) => {
+  try {
+    const query = "SELECT description, amount FROM users LEFT JOIN transactions USING (userId) WHERE userId = $1";
+    const {rows} = await client.query(query, [req.params.id]);
+
+    res.send(rows)
+  } catch(err) {
+    next(err);
+  }
+})
+
 router.post("/", async (req, res, next) => {
   try {
     const {name, email} = req.body
@@ -55,14 +67,14 @@ router.post("/", async (req, res, next) => {
 
 router.post("/:id", async (req, res, next) => {
   try {
-    const {details, amount, tags} = req.body;
+    const {description, amount, tags} = req.body;
     const {id} = req.params;
     //have to process tags to insert into table
 
     //post into transactions, tags, and tags_transactions
 
-    const query = "INSERT INTO transactions (details, amount, userId) VALUES ($1, $2, $3) RETURNING *";
-    const {rows} = await client.query(query, [details, amount, id])
+    const query = "INSERT INTO transactions (description, amount, userId) VALUES ($1, $2, $3) RETURNING *";
+    const {rows} = await client.query(query, [description, amount, id])
 
     res.status(201).send(rows[0]); //rewrite to send back newly created task or redirect to task list for user
   } catch(err) {
