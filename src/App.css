@@ -29,3 +29,12 @@
   flex-direction: row;
   flex: 1;
 }
+
+.user-list {
+  display: flex;
+}
+
+.user {
+  flex-direction: row;
+  flex: 1;
+}
