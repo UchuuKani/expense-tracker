@@ -68,13 +68,12 @@ router.post("/", async (req, res, next) => {
 router.post("/:id", async (req, res, next) => {
   try {
     const {description, amount, tags} = req.body;
-    const {id} = req.params;
     //have to process tags to insert into table
 
     //post into transactions, tags, and tags_transactions
 
     const query = "INSERT INTO transactions (description, amount, userId) VALUES ($1, $2, $3) RETURNING *";
-    const {rows} = await client.query(query, [description, amount, id])
+    const {rows} = await client.query(query, [description, amount, req.params.id])
 
     res.status(201).send(rows[0]); //rewrite to send back newly created task or redirect to task list for user
   } catch(err) {
