@@ -8,6 +8,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm run dev`
+
+Runs the proxy server for development together with `npm run start`
+
 ### `npm start`
 
 Runs the app in the development mode.<br />
