@@ -12,27 +12,34 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// thinking of having /api/users/:userId fetch all data related to user
+// router.get("/:id", async (req, res, next) => {
+//   try {
+//     const query = "SELECT users.* FROM users WHERE users.id = $1";
+//     const {rows} = await client.query(query, [req.params.id]);
+
+//     if (!rows.length) {
+//       const new404 = new Error("Page not found");
+//       new404.status = 404;
+//       throw new404;
+//     }
+
+//     res.json(rows[0]);
+//   } catch(err) {
+//     next(err);
+//   }
+// });
+
 router.get("/:id", async (req, res, next) => {
   try {
-    const query = "SELECT users.* FROM users WHERE users.id = $1";
+    const query = "SELECT users.*, transactions.* FROM users LEFT JOIN transactions USING (userId) WHERE userId = $1";
     const {rows} = await client.query(query, [req.params.id]);
 
     if (!rows.length) {
-      const new404 = new Error("Page not found");
+      const new404 = new Error("User not found");
       new404.status = 404;
       throw new404;
     }
-
-    res.json(rows[0]);
-  } catch(err) {
-    next(err);
-  }
-});
-
-router.get("/:id/transactions", async (req, res, next) => {
-  try {
-    const query = "SELECT description, amount FROM users LEFT JOIN transactions USING (userId) WHERE userId = $1";
-    const {rows} = await client.query(query, [req.params.id]);
 
     res.send(rows)
   } catch(err) {
