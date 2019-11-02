@@ -1,5 +1,6 @@
 import React from "react";
 
+
 const User = (props) => {
   const {name, email} = props.user;
   return (

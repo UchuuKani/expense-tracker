@@ -3,17 +3,17 @@ import React from "react";
 import Transaction from "./Transaction";
 
 const TransactionList = (props) => {
-  const {transactions} = props;
+  const {userTransactions} = props;
 
   return (
     <div>
       <p>Transactions</p>
-      {/*
-        transactions.map(transaction => {
-          return <Transaction key={transaction.transactionId}
+      {
+        userTransactions.map(transaction => {
+          return <Transaction key={transaction.transactionid}
           transaction={transaction} />
         })
-      */}
+      }
     </div>
   )
 }

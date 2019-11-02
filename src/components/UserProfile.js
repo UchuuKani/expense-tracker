@@ -16,14 +16,16 @@ const UserProfile = (props) => {
     }
 
     fetchUser()
-  }, []);
-
-  console.log(user)
+  }, [props.match.params.userId]);
 
   return (
     <div>
       {
-        user[0] && <User user={user[0]}/>
+        user[0] &&
+        <div>
+          <User user={user[0]} />
+          <TransactionList userTransactions={user} />
+        </div>
       }
     </div>
     )

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
-import User from "./User"
 
 const UserList = (props) => {
   const [users, setUsers] = useState({users: []});
@@ -21,7 +21,7 @@ const UserList = (props) => {
       <div className="user-list">
         {
           users.length && users.map((user, idx) => {
-            return <User key={idx} user={user} />
+            return <Link key={user.userid} to={`/users/${user.userid}`}><h3>{user.name}</h3></Link>
           })
         }
       </div>
