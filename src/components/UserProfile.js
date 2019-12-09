@@ -24,6 +24,7 @@ const UserProfile = (props) => {
         user[0] &&
         <div>
           <User user={user[0]} />
+          <h2>transactions</h2>
           <TransactionList userTransactions={user} />
         </div>
       }

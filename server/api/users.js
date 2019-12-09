@@ -30,6 +30,7 @@ router.get("/", async (req, res, next) => {
 //   }
 // });
 
+//gets a user and all of their transactions
 router.get("/:id", async (req, res, next) => {
   try {
     const query = "SELECT users.*, transactions.* FROM users LEFT JOIN transactions USING (userId) WHERE userId = $1";
@@ -47,7 +48,7 @@ router.get("/:id", async (req, res, next) => {
   }
 })
 
-//route to grab specific transaction
+//gets a specific user's specific transaction
 router.get("/:id/transactions/:transactionId", async (req, res, next) => {
   try {
     const query = "SELECT description, amount FROM users LEFT JOIN transactions USING (userId) WHERE userId = $1";
@@ -59,6 +60,8 @@ router.get("/:id/transactions/:transactionId", async (req, res, next) => {
   }
 })
 
+
+//posts a new user to the database
 router.post("/", async (req, res, next) => {
   try {
     const {name, email} = req.body
@@ -72,6 +75,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+//posts a new transcation for a specific user, and includes tags
 router.post("/:id", async (req, res, next) => {
   try {
     const {description, amount, tags} = req.body;

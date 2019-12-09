@@ -6,15 +6,19 @@ const TransactionList = (props) => {
   const {userTransactions} = props;
 
   return (
-    <div>
-      <p>Transactions</p>
+    <table>
+      <tr>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Date</th>
+      </tr>
       {
         userTransactions.map(transaction => {
           return <Transaction key={transaction.transactionid}
           transaction={transaction} />
         })
       }
-    </div>
+    </table>
   )
 }
 
