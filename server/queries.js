@@ -1,4 +1,4 @@
-
+const getAllUsers = "SELECT users.* FROM users";
 
 const getUserIdTransactions = "SELECT row_to_json(t) AS user FROM \
   (SELECT id, name, email, \
@@ -9,6 +9,16 @@ const getUserIdTransactions = "SELECT row_to_json(t) AS user FROM \
         WHERE id = $1\
   ) t";
 
+const getSpecificTransaction = "";
+
+const postNewUser = "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *";
+
+const postNewUserTransaction = "INSERT INTO transactions (description, amount, user_id) VALUES ($1, $2, $3) RETURNING *";
+
 module.exports = {
-  getUserIdTransactions
+  getAllUsers,
+  getUserIdTransactions,
+  getSpecificTransaction, //is this needed?
+  postNewUser,
+  postNewUserTransaction //not written
 }

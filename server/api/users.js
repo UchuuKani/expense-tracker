@@ -4,7 +4,7 @@ const extendedQueries = require("../queries");
 
 router.get("/", async (req, res, next) => {
   try {
-    const query = "SELECT users.* FROM users";
+    const query = extendedQueries.getAllUsers;
     const {rows} = await client.query(query);
 
     res.json(rows);
@@ -12,24 +12,6 @@ router.get("/", async (req, res, next) => {
     next(err);
   }
 });
-
-// thinking of having /api/users/:userId fetch all data related to user
-// router.get("/:id", async (req, res, next) => {
-//   try {
-//     const query = "SELECT users.* FROM users WHERE users.id = $1";
-//     const {rows} = await client.query(query, [req.params.id]);
-
-//     if (!rows.length) {
-//       const new404 = new Error("Page not found");
-//       new404.status = 404;
-//       throw new404;
-//     }
-
-//     res.json(rows[0]);
-//   } catch(err) {
-//     next(err);
-//   }
-// });
 
 //gets a user and all of their transactions
 router.get("/:id", async (req, res, next) => {
@@ -44,7 +26,7 @@ router.get("/:id", async (req, res, next) => {
       throw new404;
     }
 
-    res.send(rows)
+    res.send(rows[0].user);
   } catch(err) {
     next(err);
   }
@@ -62,12 +44,11 @@ router.get("/:id/transactions/:transactionId", async (req, res, next) => {
   }
 })
 
-
 //posts a new user to the database
 router.post("/", async (req, res, next) => {
   try {
     const {name, email} = req.body
-    const query = "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *";
+    const query = extendedQueries.postNewUser;
 
     const {rows} = await client.query(query, [name, email]);
 
@@ -77,6 +58,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+//QUERY NOT COMPLETE - DOES NOT ADD TO TAGS JOIN TABLE
 //posts a new transcation for a specific user, and includes tags
 router.post("/:id", async (req, res, next) => {
   try {
@@ -85,7 +67,7 @@ router.post("/:id", async (req, res, next) => {
 
     //post into transactions, tags, and tags_transactions
 
-    const query = "INSERT INTO transactions (description, amount, user_id) VALUES ($1, $2, $3) RETURNING *";
+    const query = extendedQueries.postNewUserTransaction;
     const {rows} = await client.query(query, [description, amount, req.params.id])
 
     res.status(201).send(rows[0]); //rewrite to send back newly created task or redirect to task list for user

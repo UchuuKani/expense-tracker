@@ -20,8 +20,8 @@ const UserList = (props) => {
       <h1>This is a list of all registered users</h1>
       <div className="user-list">
         {
-          users.length && users.map((user, idx) => {
-            return <Link key={user.userid} to={`/users/${user.userid}`}><h3>{user.name}</h3></Link>
+          users.length && users.map(user => {
+            return <Link key={user.id} to={`/users/${user.id}`}><h3>{user.name}</h3></Link>
           })
         }
       </div>

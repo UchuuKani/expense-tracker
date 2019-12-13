@@ -21,11 +21,14 @@ const UserProfile = (props) => {
   return (
     <div>
       {
-        user[0] &&
+        user.id &&
         <div>
-          <User user={user[0]} />
-          <h2>transactions</h2>
-          <TransactionList userTransactions={user} />
+          <User user={user} />
+          <h2>Transactions</h2>
+          {
+            user.user_transactions ? <TransactionList userTransactions={user.user_transactions} /> : <h1>No posted transactions</h1>
+          }
+
         </div>
       }
     </div>

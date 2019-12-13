@@ -7,17 +7,19 @@ const TransactionList = (props) => {
 
   return (
     <table>
-      <tr>
-        <th>Description</th>
-        <th>Amount</th>
-        <th>Date</th>
-      </tr>
-      {
-        userTransactions.map(transaction => {
-          return <Transaction key={transaction.transactionid}
-          transaction={transaction} />
-        })
-      }
+      <tbody>
+        <tr>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Date</th>
+        </tr>
+        {
+          userTransactions.map(transaction => {
+            return <Transaction key={transaction.id}
+            transaction={transaction} />
+          })
+        }
+      </tbody>
     </table>
   )
 }
