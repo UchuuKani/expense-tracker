@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const client = require("../db");
 const extendedQueries = require("../queries");
+const {tagParser} = require("../../utils");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -63,7 +64,8 @@ router.post("/", async (req, res, next) => {
 router.post("/:id", async (req, res, next) => {
   try {
     const {description, amount, tags} = req.body;
-    //have to process tags to insert into table
+    //have to process tags to insert into table, assuming it is a comma separated string
+    const processedTags = tagParser(tags);
 
     //post into transactions, tags, and tags_transactions
 
