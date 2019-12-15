@@ -36,7 +36,7 @@ router.get("/:id", async (req, res, next) => {
 //gets a specific user's specific transaction
 router.get("/:id/transactions/:transactionId", async (req, res, next) => {
   try {
-    const query = "SELECT description, amount FROM users LEFT JOIN transactions USING (user_id) WHERE user_id = $1";
+    const query = extendedQueries.getSpecificTransaction;
     const {rows} = await client.query(query, [req.params.id]);
 
     res.send(rows)
@@ -69,8 +69,10 @@ router.post("/:id", async (req, res, next) => {
 
     //post into transactions, tags, and tags_transactions
 
-    const query = extendedQueries.postNewUserTransaction;
-    const {rows} = await client.query(query, [description, amount, req.params.id])
+    const queryTransactions = extendedQueries.postNewUserTransaction;
+    const {rows} = await client.query(queryTransactions, [description, amount, req.params.id]);
+
+    const queryTags = extendedQueries.postTagsOnTransaction;
 
     res.status(201).send(rows[0]); //rewrite to send back newly created task or redirect to task list for user
   } catch(err) {

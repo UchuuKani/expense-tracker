@@ -16,7 +16,7 @@ CREATE TABLE transactions (
 
 CREATE TABLE tags (
   id SERIAL PRIMARY KEY,
-  tagName VARCHAR(255) NOT NULL
+  tag_name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE tags_transactions (
@@ -40,19 +40,19 @@ INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM 
 INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM users WHERE name = 'Alphard'), 'Big old TV', 10000000);
 
 -- tags
-INSERT INTO tags (tagName) VALUES ('food');
-INSERT INTO tags (tagName) VALUES ('gaming');
-INSERT INTO tags (tagName) VALUES ('technology');
-INSERT INTO tags (tagName) VALUES ('groceries');
-INSERT INTO tags (tagName) VALUES ('entertainment');
+INSERT INTO tags (tag_name) VALUES ('food');
+INSERT INTO tags (tag_name) VALUES ('gaming');
+INSERT INTO tags (tag_name) VALUES ('technology');
+INSERT INTO tags (tag_name) VALUES ('groceries');
+INSERT INTO tags (tag_name) VALUES ('entertainment');
 
 -- tags_transactions
-INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Just some chips'), (SELECT id FROM tags WHERE tagName = 'food'));
-INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'The Switch'), (SELECT id FROM tags WHERE tagName = 'gaming'));
-INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'The Switch'), (SELECT id FROM tags WHERE tagName = 'entertainment'));
-INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Japan Village snacks'), (SELECT id FROM tags WHERE tagName = 'groceries'));
-INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Garlic, onions and eye of newt'), (SELECT id FROM tags WHERE tagName = 'groceries'));
-INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Empanada ingredients'), (SELECT id FROM tags WHERE tagName = 'food'));
-INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Empanada ingredients'), (SELECT id FROM tags WHERE tagName = 'groceries'));
-INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Big old TV'), (SELECT id FROM tags WHERE tagName = 'entertainment'));
+INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Just some chips'), (SELECT id FROM tags WHERE tag_name = 'food'));
+INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'The Switch'), (SELECT id FROM tags WHERE tag_name = 'gaming'));
+INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'The Switch'), (SELECT id FROM tags WHERE tag_name = 'entertainment'));
+INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Japan Village snacks'), (SELECT id FROM tags WHERE tag_name = 'groceries'));
+INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Garlic, onions and eye of newt'), (SELECT id FROM tags WHERE tag_name = 'groceries'));
+INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Empanada ingredients'), (SELECT id FROM tags WHERE tag_name = 'food'));
+INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Empanada ingredients'), (SELECT id FROM tags WHERE tag_name = 'groceries'));
+INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Big old TV'), (SELECT id FROM tags WHERE tag_name = 'entertainment'));
 
