@@ -11,8 +11,11 @@ const Routes = (props) => {
     <Switch> {/* should determine how to better utilize Switch */}
       <Route exact path="/" component={LandingPage} />
       <Route exact path="/users" component={UserList} />
-      <Route path="/users/:userId/transactions" component={Test} />
-      <Route path="/users/:userId" component={UserProfile} />
+      <Route path="/users/:userId/transactions/:transactionId" component={Test} />
+      <Route path="/users/:userId" render={({match}) => <UserProfile userId={match.params.userId}/>} /> {/* this pattern for passing down route props more performant I believe? - supposed to prevent re-renders or something, a reference is below
+      https://learnwithparam.com/blog/how-to-pass-props-in-react-router/
+      https://www.robinwieruch.de/react-pass-props-to-component#pass-props-with-react-router
+    */}
       <Route path="/tags" component={Test} />
     </Switch>
   )

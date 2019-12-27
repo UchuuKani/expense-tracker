@@ -5,18 +5,18 @@ import axios from "axios";
 import User from "./User";
 import TransactionList from "./TransactionList";
 
-const UserProfile = (props) => {
+const UserProfile = ({userId}) => {
   const [user, setUser] = useState({user: {}});
 
   useEffect(() => {
     const fetchUser = async (id) => {
-      const {data} = await axios.get(`/api/users/${props.match.params.userId}`);
+      const {data} = await axios.get(`/api/users/${userId}`);
 
       setUser(data);
     }
 
     fetchUser()
-  }, [props.match.params.userId]);
+  }, [userId]);
 
   return (
     <div>

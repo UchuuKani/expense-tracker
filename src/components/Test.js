@@ -5,6 +5,7 @@ const Test = (props) => {
   return (
     <div>
       <h1>This is a test: {params.userId}</h1>
+      <p>This is also part of the test: {}</p>
     </div>
   )
 }
