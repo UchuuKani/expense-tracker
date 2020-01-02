@@ -40,7 +40,6 @@ router.get('/:id', async (req, res, next) => {
     //   throw new404;
     // }
     res.send(userWithTransactions);
-    // res.send(rows[0]);
   } catch (err) {
     next(err);
   }
