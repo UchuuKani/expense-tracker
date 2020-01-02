@@ -17,16 +17,30 @@ router.get('/', async (req, res, next) => {
 //gets a user and all of their transactions
 router.get('/:id', async (req, res, next) => {
   try {
-    const query = extendedQueries.getUserIdTransactions;
-    const { rows } = await client.query(query, [req.params.id]);
+    const userQuery = 'SELECT users.* FROM users WHERE id = $1';
+    const user = await client.query(userQuery, [req.params.id]);
 
-    if (!rows.length) {
+    if (!user.rows.length) {
       const new404 = new Error('User not found');
       new404.status = 404;
       throw new404;
     }
 
-    res.send(rows[0]);
+    const userData = user.rows[0];
+
+    const query = extendedQueries.followUpUserId;
+    const { rows } = await client.query(query, [req.params.id]);
+
+    const userWithTransactions = { ...userData, transactions: rows };
+
+    // this 404 check is in place for when I only make one query instead of two
+    // if (!rows.length) {
+    //   const new404 = new Error('User not found');
+    //   new404.status = 404;
+    //   throw new404;
+    // }
+    res.send(userWithTransactions);
+    // res.send(rows[0]);
   } catch (err) {
     next(err);
   }

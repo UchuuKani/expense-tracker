@@ -30,6 +30,8 @@ INSERT INTO users (name, email) VALUES ('Alex', 'alex@email.com');
 INSERT INTO users (name, email) VALUES ('Nataly', 'nataly@email.com');
 INSERT INTO users (name, email) VALUES ('Hetty', 'hetty1336@example.com');
 INSERT INTO users (name, email) VALUES ('Alphard', 'apha@example.com');
+INSERT INTO users (name, email) VALUES ('Notransactions', 'none@example.com');
+
 
 -- transactions
 INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM users WHERE name = 'Alex'), 'Just some chips', 150);
