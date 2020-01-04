@@ -11,7 +11,8 @@ CREATE TABLE transactions (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) NOT NULL,
   description varchar(255) DEFAULT NULL,
-  amount INTEGER NOT NULL
+  amount INTEGER NOT NULL,
+  transaction_date TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE tags (

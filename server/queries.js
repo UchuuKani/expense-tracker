@@ -26,7 +26,8 @@ const followUpUserId =
     ON \
     tags_transactions.tag_id = tags.id \
     WHERE transactions.user_id = $1 \
-    GROUP BY transactions.id';
+    GROUP BY transactions.id \
+    ORDER BY transactions.transaction_date DESC';
 
 //do I just want to grab tags for specific transactionId, or grab the specific transaction along with all associated tags, and just pass down transaction info down from front end -- my answer is grab the user and all (or some) transactions with transactions joined to tags
 
