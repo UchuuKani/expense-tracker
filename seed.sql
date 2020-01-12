@@ -3,14 +3,14 @@ DROP TABLE IF EXISTS users, transactions, tags, tags_transactions;
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
-  name TEXT DEFAULT NULL,
-  email VARCHAR(255) DEFAULT NULL
+  name TEXT NOT NULL,
+  email VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE transactions (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) NOT NULL,
-  description varchar(255) DEFAULT NULL,
+  description varchar(255) NOT NULL,
   amount INTEGER NOT NULL,
   transaction_date TIMESTAMP DEFAULT NOW()
 );

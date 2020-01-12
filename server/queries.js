@@ -37,6 +37,10 @@ const postNewUser =
 const postNewUserTransaction =
   'INSERT INTO transactions (description, amount, user_id) VALUES ($1, $2, $3) RETURNING *';
 
+const postNewTags = '';
+
+const postNewTransactionsTags = '';
+
 // select users.*, json_agg(f) from (select row_to_json(t) AS transactions from
 // (select * from transactions where user_id = users.id) t) f
 // join users
@@ -82,4 +86,6 @@ module.exports = {
   postNewUserTransaction, //not written
   postTagsOnTransaction, //not written,
   alsoWorksSortOf,
+  postNewTags,
+  postNewTransactionsTags,
 };
