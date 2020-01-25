@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Transaction = props => {
-  const { description, amount, transaction_date } = props.transaction;
+const Transaction = ({ transaction }) => {
+  const { description, amount, transaction_date } = transaction;
 
   return (
     <tr>

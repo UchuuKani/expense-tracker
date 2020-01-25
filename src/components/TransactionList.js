@@ -1,10 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import Transaction from "./Transaction";
+import Transaction from './Transaction';
 
-const TransactionList = (props) => {
-  const {userTransactions} = props;
-
+const TransactionList = ({ userTransactions }) => {
   return (
     <table>
       <tbody>
@@ -13,15 +11,12 @@ const TransactionList = (props) => {
           <th>Amount</th>
           <th>Date</th>
         </tr>
-        {
-          userTransactions.map(transaction => {
-            return <Transaction key={transaction.id}
-            transaction={transaction} />
-          })
-        }
+        {userTransactions.map(transaction => {
+          return <Transaction key={transaction.id} transaction={transaction} />;
+        })}
       </tbody>
     </table>
-  )
-}
+  );
+};
 
 export default TransactionList;
