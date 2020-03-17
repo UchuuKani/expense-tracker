@@ -35,7 +35,7 @@ const postNewUser =
   'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *';
 
 const postNewUserTransaction =
-  'INSERT INTO transactions (description, amount, user_id) VALUES ($1, $2, $3) RETURNING *';
+  'INSERT INTO transactions (description, amount, date, user_id) VALUES ($1, $2, $3, $4) RETURNING *';
 
 const postNewTags = '';
 

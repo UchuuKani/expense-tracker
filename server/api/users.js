@@ -39,7 +39,7 @@ router.get('/:id', async (req, res, next) => {
     //   new404.status = 404;
     //   throw new404;
     // }
-
+    console.log('plz log', userWithTransactions.transactions[0].tags);
     res.send(userWithTransactions);
   } catch (err) {
     next(err);
@@ -64,22 +64,26 @@ router.post('/', async (req, res, next) => {
 //posts a new transcation for a specific user, and includes tags
 router.post('/:id', async (req, res, next) => {
   try {
-    const { description, amount, tags } = req.body;
+    const { description, amount, tags, date } = req.body;
     //have to process tags to insert into table, assuming it is a comma separated string
-    const processedTags = tagParser(tags);
-
-    //post into transactions, tags, and tags_transactions
-
     const queryTransactions = extendedQueries.postNewUserTransaction;
     const { rows } = await client.query(queryTransactions, [
       description,
       amount,
+      date,
       req.params.id,
     ]);
 
-    const queryTags = extendedQueries.postTagsOnTransaction;
+    let response = rows.data;
 
-    res.status(201).send(rows[0]); //rewrite to send back newly created task or redirect to task list for user
+    if (tags !== '') {
+      //post into transactions, tags, and tags_transactions
+
+      const queryTags = extendedQueries.postTagsOnTransaction;
+    }
+    const processedTags = tagParser(tags);
+
+    res.status(201).send(response); //rewrite to send back newly created task or redirect to task list for user
   } catch (err) {
     next(err);
   }

@@ -33,6 +33,7 @@ const UserProfile = ({ userId }) => {
 const AddForm = () => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
+  const [tags, setTags] = useState('');
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -55,6 +56,15 @@ const AddForm = () => {
         value={amount}
         onChange={e => setAmount(e.target.value)}
       ></input>
+      <div>
+        <label for="tags">Please enter tags as a comma separated list</label>
+        <input
+          type="text"
+          name="tags"
+          value={tags}
+          onChange={e => setTags(e.target.value)}
+        ></input>
+      </div>
       <button type="submit">Submit</button>
     </form>
   );
