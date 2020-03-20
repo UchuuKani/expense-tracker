@@ -1,6 +1,17 @@
 import React from 'react';
 
-const Transaction = ({ transaction }) => {
+interface Props {
+  transaction: ITransaction;
+}
+
+export interface ITransaction {
+  description: string;
+  amount: number;
+  transaction_date: string;
+  id: number;
+}
+
+const Transaction = ({ transaction }: Props) => {
   const { description, amount, transaction_date } = transaction;
 
   return (

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import useAxios from './custom_hooks/useAxios';
 //this component represents the profile for a single user, and should render all
 //of their transactions in <TranscationList /> => individual <Transcation />
-import User from './User';
+import User, { IUser } from './User';
 import TransactionList from './TransactionList';
 
-const UserProfile = ({ userId }) => {
+const UserProfile = ({ userId }: IUser) => {
   // // want to use a useReducer call for user transactions
 
-  const [user] = useAxios(`/api/users/${userId}`);
+  const [user]: any = useAxios(`/api/users/${userId}`);
 
   return (
     <div>
@@ -35,7 +35,7 @@ const AddForm = () => {
   const [amount, setAmount] = useState('');
   const [tags, setTags] = useState('');
 
-  const handleSubmit = e => {
+  const handleSubmit = (e: any): void => {
     e.preventDefault();
     console.log(description, amount);
   };
@@ -47,7 +47,7 @@ const AddForm = () => {
         type="text"
         name="transactionDescription"
         value={description}
-        onChange={e => setDescription(e.target.value)}
+        onChange={(e: any): void => setDescription(e.target.value)}
       ></input>
       <label htmlFor="transactionAmount">Amount</label>
       <input

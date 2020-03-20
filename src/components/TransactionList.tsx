@@ -1,8 +1,12 @@
 import React from 'react';
 
-import Transaction from './Transaction';
+import Transaction, { ITransaction } from './Transaction';
 
-const TransactionList = ({ userTransactions }) => {
+interface Props {
+  userTransactions: Array<ITransaction>;
+}
+
+const TransactionList = ({ userTransactions }: Props) => {
   return (
     <table>
       <tbody>

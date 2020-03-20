@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default (url, config) => {
+export default (url: string, config?: string) => {
   const [response, setResponse] = useState({});
   const [loading, setLoading] = useState(false);
 
