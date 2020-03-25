@@ -64,7 +64,11 @@ router.post('/', async (req, res, next) => {
 //posts a new transcation for a specific user, and includes tags
 router.post('/:id', async (req, res, next) => {
   try {
-    const { description, amount, tags, date } = req.body;
+    let { description, amount, tags, date } = req.body;
+    // request body comes in as {description: string, amount: string, tags: string, date: string}
+    // amount needs to be parsed into a number and then multiplied by 100 to convert from dollars to cents
+    // tags comes in as a string and should be processed into an array of type string, string[] - this will be done by the tagParser utility function
+
     //have to process tags to insert into table, assuming it is a comma separated string
     const queryTransactions = extendedQueries.postNewUserTransaction;
     const { rows } = await client.query(queryTransactions, [
@@ -77,9 +81,9 @@ router.post('/:id', async (req, res, next) => {
     let response = rows.data;
 
     if (tags !== '') {
-      //post into transactions, tags, and tags_transactions
+      //if tags list is not empty, POST into transactions, tags, and tags_transactions
 
-      const queryTags = extendedQueries.postTagsOnTransaction;
+      var queryTags = extendedQueries.postTagsOnTransaction;
     }
     const processedTags = tagParser(tags);
 
