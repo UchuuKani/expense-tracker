@@ -1,9 +1,9 @@
 // import React, {useState, useEffect} from 'react';
 import './App.css';
-import React from "react";
+import React from 'react';
 
-import Routes from "./components/Routes";
-import Navbar from "./components/Navbar";
+import Routes from './components/Routes';
+import Navbar from './components/Navbar';
 
 const App = () => {
   return (
@@ -11,8 +11,8 @@ const App = () => {
       <Navbar />
       <Routes />
     </div>
-  )
-}
+  );
+};
 
 export default App;
 
@@ -29,7 +29,6 @@ export default App;
 //   }, []); //not sure why, but not supplying second argument to useEffect as []
 //   //caused the app to constantly make the axios request
 //   //also passing in [users] caused the infinite useEffect calls - reference the hooks docs for conditionally firing an effect
-
 
 //   console.log("one render")
 //   return (

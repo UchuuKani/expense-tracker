@@ -4,6 +4,7 @@ import useAxios from './custom_hooks/useAxios';
 //of their transactions in <TranscationList /> => individual <Transcation />
 import User, { IUser } from './User';
 import TransactionList from './TransactionList';
+import AddTransaction from './AddTransaction';
 
 const UserProfile = ({ userId }: IUser) => {
   // // want to use a useReducer call for user transactions
@@ -16,7 +17,7 @@ const UserProfile = ({ userId }: IUser) => {
         <div>
           <User user={user} />
           <h2>Transactions</h2>
-          <div className="transactionList">
+          <div className="transaction-list">
             {user.transactions ? (
               <TransactionList userTransactions={user.transactions} />
             ) : (
@@ -25,48 +26,8 @@ const UserProfile = ({ userId }: IUser) => {
           </div>
         </div>
       )}
-      <AddForm />
+      <AddTransaction />
     </div>
-  );
-};
-
-const AddForm = () => {
-  const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('');
-  const [tags, setTags] = useState('');
-
-  const handleSubmit = (e: any): void => {
-    e.preventDefault();
-    console.log(description, amount);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="transactionDescription">Description</label>
-      <input
-        type="text"
-        name="transactionDescription"
-        value={description}
-        onChange={(e: any): void => setDescription(e.target.value)}
-      ></input>
-      <label htmlFor="transactionAmount">Amount</label>
-      <input
-        type="text"
-        name="transactionAmount"
-        value={amount}
-        onChange={e => setAmount(e.target.value)}
-      ></input>
-      <div>
-        <label for="tags">Please enter tags as a comma separated list</label>
-        <input
-          type="text"
-          name="tags"
-          value={tags}
-          onChange={e => setTags(e.target.value)}
-        ></input>
-      </div>
-      <button type="submit">Submit</button>
-    </form>
   );
 };
 

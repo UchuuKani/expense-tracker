@@ -39,7 +39,7 @@ router.get('/:id', async (req, res, next) => {
     //   new404.status = 404;
     //   throw new404;
     // }
-    console.log('plz log', userWithTransactions.transactions[0].tags);
+
     res.send(userWithTransactions);
   } catch (err) {
     next(err);
@@ -80,14 +80,9 @@ router.post('/:id', async (req, res, next) => {
 
     let response = rows.data;
 
-    if (tags !== '') {
-      //if tags list is not empty, POST into transactions, tags, and tags_transactions
+    // TODO - add logic for adding tags to a transaction in join table and tags table - use Postgres UPSERT
 
-      var queryTags = extendedQueries.postTagsOnTransaction;
-    }
-    const processedTags = tagParser(tags);
-
-    res.status(201).send(response); //rewrite to send back newly created task or redirect to task list for user
+    res.json(response); //rewrite to send back newly created task or redirect to task list for user
   } catch (err) {
     next(err);
   }

@@ -1,45 +1,31 @@
 .App {
+  border: 2px solid black;
   text-align: center;
+  background: #f5f5f5;
+  color: #333;
+  margin: 20px;
+  padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.add-transaction {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #09d3ac;
+.transaction-list {
+  display: flex;
 }
 
 .navbar {
   display: flex;
+  justify-content: space-around;
 }
 
-.navbar > a {
-  flex-direction: row;
-  flex: 1;
-}
-
-.user-list {
-  display: flex;
-}
-
-.user-list > * {
-  flex-direction: row;
-  flex: 1;
-}
-
-.user {
-  flex-direction: row;
-  flex: 1;
+/*link to navbar link style here: https://www.w3schools.com/css/css_link.asp*/
+.link-button {
+  background-color: lightgrey;
+  color: black;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
 }
