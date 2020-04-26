@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import useAxios from "./custom_hooks/useAxios";
 //this component represents the profile for a single user, and should render all
 //of their transactions in <TranscationList /> => individual <Transcation />
