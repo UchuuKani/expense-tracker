@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const UserList = props => {
-  const [users, setUsers] = useState({ users: [] });
+const UserList = () => {
+  const [users, setUsers]: [any, any] = useState({ users: [] });
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -19,7 +19,7 @@ const UserList = props => {
       <h1>This is a list of all registered users</h1>
       <div className="user-list">
         {users.length &&
-          users.map(user => {
+          users.map((user: any) => {
             return (
               <Link key={user.id} to={`/users/${user.id}`}>
                 <h3>{user.name}</h3>

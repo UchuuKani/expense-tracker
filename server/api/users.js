@@ -1,9 +1,9 @@
-const router = require('express').Router();
-const client = require('../db');
-const extendedQueries = require('../queries');
-const { tagParser } = require('../../utils');
+const router = require("express").Router();
+const client = require("../db");
+const extendedQueries = require("../queries");
+// const { tagParser } = require("../../utils");
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const query = extendedQueries.getAllUsers;
     const { rows } = await client.query(query);
@@ -15,13 +15,13 @@ router.get('/', async (req, res, next) => {
 });
 
 //gets a user and all of their transactions
-router.get('/:id', async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
-    const userQuery = 'SELECT users.* FROM users WHERE id = $1';
+    const userQuery = "SELECT users.* FROM users WHERE id = $1";
     const user = await client.query(userQuery, [req.params.id]);
 
     if (!user.rows.length) {
-      const new404 = new Error('User not found');
+      const new404 = new Error("User not found");
       new404.status = 404;
       throw new404;
     }
@@ -47,7 +47,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 //posts a new user to the database
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const { name, email } = req.body;
     const query = extendedQueries.postNewUser;
@@ -62,9 +62,9 @@ router.post('/', async (req, res, next) => {
 
 //QUERY NOT COMPLETE - DOES NOT ADD TO TAGS JOIN TABLE
 //posts a new transcation for a specific user, and includes tags
-router.post('/:id', async (req, res, next) => {
+router.post("/:id", async (req, res, next) => {
   try {
-    let { description, amount, tags, date } = req.body;
+    let { description, amount, date } = req.body;
     // request body comes in as {description: string, amount: string, tags: string, date: string}
     // amount needs to be parsed into a number and then multiplied by 100 to convert from dollars to cents
     // tags comes in as a string and should be processed into an array of type string, string[] - this will be done by the tagParser utility function
