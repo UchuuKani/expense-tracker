@@ -21,10 +21,12 @@ const UserProfile = ({ userId }: Props) => {
   return (
     <div>
       {user.id && (
-        <div>
-          <User user={user.id} />
-          <h2>Transactions</h2>
-          <div className="transaction-list">
+        <div id="test">
+          {/* I was previously passing user={user.id} into the User component so the `Name` and `Email` fields were not being 
+          rendered. No error from TS though...why is that? */}
+          <User user={user} />
+          <div>
+            <h2>Transactions</h2>
             {user.transactions ? (
               <TransactionList userTransactions={user.transactions} />
             ) : (

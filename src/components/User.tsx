@@ -15,9 +15,9 @@ const User = ({ user }: Props) => {
   const { name, email } = user;
   return (
     <div className="user">
-      <h1>User Info</h1>
-      <h2>Username: {name}</h2>
-      <h2>Email: {email}</h2>
+      <h2>User Info</h2>
+      <h3>Username: {name}</h3>
+      <h3>Email: {email}</h3>
     </div>
   );
 };

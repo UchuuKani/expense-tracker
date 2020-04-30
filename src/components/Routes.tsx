@@ -6,11 +6,6 @@ import LandingPage from "./LandingPage";
 import UserList from "./UserList";
 import UserProfile from "./UserProfile";
 
-type TParams = {
-  userId: string;
-  transactionId?: string;
-};
-
 const Routes = () => {
   return (
     <Switch>

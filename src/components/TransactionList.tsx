@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import Transaction, { ITransaction } from './Transaction';
+import Transaction, { ITransaction } from "./Transaction";
 
 interface Props {
   userTransactions: Array<ITransaction>;
@@ -8,14 +8,14 @@ interface Props {
 
 const TransactionList = ({ userTransactions }: Props) => {
   return (
-    <table>
+    <table className="transaction-list">
       <tbody>
         <tr>
           <th>Description</th>
           <th>Amount</th>
           <th>Date</th>
         </tr>
-        {userTransactions.map(transaction => {
+        {userTransactions.map((transaction) => {
           return <Transaction key={transaction.id} transaction={transaction} />;
         })}
       </tbody>
