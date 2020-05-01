@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const AddTransaction = () => {
-  const [description, setDescription] = useState('');
-  const [amount, setAmount] = useState('');
-  const [tags, setTags] = useState('');
+  const [description, setDescription] = useState("");
+  const [amount, setAmount] = useState("");
+  const [tags, setTags] = useState("");
 
   const handleSubmit = (e: any): void => {
     e.preventDefault();
@@ -24,7 +24,7 @@ const AddTransaction = () => {
         type="text"
         name="transactionAmount"
         value={amount}
-        onChange={e => setAmount(e.target.value)}
+        onChange={(e) => setAmount(e.target.value)}
       ></input>
       <div>
         <label htmlFor="tags">
@@ -34,7 +34,7 @@ const AddTransaction = () => {
           type="text"
           name="tags"
           value={tags}
-          onChange={e => setTags(e.target.value)}
+          onChange={(e) => setTags(e.target.value)}
         ></input>
       </div>
       <button type="submit">Submit</button>

@@ -1,5 +1,5 @@
 import React from "react";
-import useAxios from "./custom_hooks/useAxios";
+import useAxios, { RState } from "./custom_hooks/useAxios";
 //this component represents the profile for a single user, and should render all
 //of their transactions in <TranscationList /> => individual <Transcation />
 import User from "./User";
@@ -16,25 +16,29 @@ const UserProfile = ({ userId }: Props) => {
   // also potentially want to use a state machine to handle the logic in the useAxios hook for handling loading, fetching, error,
   // and other potential states (does what I said even make sense?)
   // for now, will avoid typing [user] with an interface, e.g. IUser because syntax is confusing
-  const [user]: any = useAxios(`/api/users/${userId}`);
+  const [userStatus] = useAxios(`/api/users/${userId}`);
 
   return (
     <div>
-      {user.id && (
+      {userStatus.current === "success" && (
         <div id="test">
           {/* I was previously passing user={user.id} into the User component so the `Name` and `Email` fields were not being 
           rendered. No error from TS though...why is that? */}
-          <User user={user} />
+          <User user={userStatus.response} />
           <div>
             <h2>Transactions</h2>
-            {user.transactions ? (
-              <TransactionList userTransactions={user.transactions} />
+            {userStatus.response.transactions.length ? (
+              <TransactionList
+                userTransactions={userStatus.response.transactions}
+              />
             ) : (
               <h1>No posted transactions</h1>
             )}
           </div>
         </div>
       )}
+      {userStatus.current === "pending" && <div>Loading...</div>}
+      {userStatus.current === "error" && <div>{userStatus.error.message}</div>}
       <AddTransaction />
     </div>
   );

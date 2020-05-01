@@ -9,6 +9,7 @@
 
 .add-transaction {
   display: flex;
+  justify-content: baseline;
 }
 
 .transaction-list {
@@ -36,4 +37,6 @@
 
 #test {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
