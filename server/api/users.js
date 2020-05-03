@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const client = require("../db");
 const extendedQueries = require("../queries");
-// const { tagParser } = require("../../utils");
+const { tagParser } = require("../../utils");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -64,25 +64,51 @@ router.post("/", async (req, res, next) => {
 //posts a new transcation for a specific user, and includes tags
 router.post("/:id", async (req, res, next) => {
   try {
-    let { description, amount, date } = req.body;
+    let { description, amount, date, tags } = req.body;
     // request body comes in as {description: string, amount: string, tags: string, date: string}
     // amount needs to be parsed into a number and then multiplied by 100 to convert from dollars to cents
     // tags comes in as a string and should be processed into an array of type string, string[] - this will be done by the tagParser utility function
 
-    //have to process tags to insert into table, assuming it is a comma separated string
-    const queryTransactions = extendedQueries.postNewUserTransaction;
-    const { rows } = await client.query(queryTransactions, [
+    // have to process tags to insert into table, assuming it is a comma separated string
+    // tagParser(tags: string): string[]
+    const processedTags = tagParser(tags);
+
+    const {
+      postNewUserTransaction,
+      insertOrDoNothingTag,
+      insertTagOnTransaction,
+    } = extendedQueries;
+
+    // post transaction to transactions table
+    // rows is an array that contains a single object with transaction's id, user_id, description, amount, and transaction_date
+    const { rows } = await client.query(postNewUserTransaction, [
       description,
-      amount,
-      date,
+      parseInt(amount),
       req.params.id,
     ]);
 
-    let response = rows.data;
+    let [transactionResponse] = rows;
+    let transactionId = transactionResponse.id;
+    console.log("row data", transactionResponse);
 
-    // TODO - add logic for adding tags to a transaction in join table and tags table - use Postgres UPSERT
+    // try to create every tag in the list in the database
+    // output is an array of the length of tags - current query does not work as expected - tags seem to be posted but no
+    // return values
+    const insertTagsArr = await Promise.all(
+      processedTags.map((tag) => {
+        return client.query(insertOrDoNothingTag, [tag]);
+      })
+    );
 
-    res.json(response); //rewrite to send back newly created task or redirect to task list for user
+    // assume insertTagsArr is an array of numbers representing the id's for all the tags that were inserted
+    // make associations in tags_transactions table
+    await Promise.all(
+      insertTagsArr.map((id) => {
+        return client.query(insertTagOnTransaction, [transactionId, id]);
+      })
+    );
+
+    res.json(transactionResponse); //rewrite to send back newly created task or redirect to task list for user
   } catch (err) {
     next(err);
   }

@@ -1,13 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent, ChangeEvent } from "react";
+import axios, { AxiosRequestConfig } from "axios";
 
-const AddTransaction = () => {
+// use FormEvent to type the submit event in the form
+// use ChangeEvent to type the onChange events
+
+interface Props {
+  userId: number;
+}
+
+const AddTransaction = ({ userId }: Props) => {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [tags, setTags] = useState("");
 
-  const handleSubmit = (e: any): void => {
-    e.preventDefault();
-    console.log(description, amount);
+  // type the event, probably also want to render something if there is an error - not sure how to use useAxios here though
+  // as hooks need to be called in the top level scope of a functional component but I want to only useAxios on submit - would
+  // be violating no conditional hooks?
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    try {
+      event.preventDefault();
+      const transactionData = await axios.post(`/api/users/${userId}`, {
+        description,
+        amount,
+        tags,
+      });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -17,14 +36,18 @@ const AddTransaction = () => {
         type="text"
         name="transactionDescription"
         value={description}
-        onChange={(e: any): void => setDescription(e.target.value)}
+        onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+          setDescription(event.target.value)
+        }
       ></input>
       <label htmlFor="transactionAmount">Amount</label>
       <input
         type="text"
         name="transactionAmount"
         value={amount}
-        onChange={(e) => setAmount(e.target.value)}
+        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          setAmount(event.target.value)
+        }
       ></input>
       <div>
         <label htmlFor="tags">
@@ -34,7 +57,9 @@ const AddTransaction = () => {
           type="text"
           name="tags"
           value={tags}
-          onChange={(e) => setTags(e.target.value)}
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            setTags(event.target.value)
+          }
         ></input>
       </div>
       <button type="submit">Submit</button>

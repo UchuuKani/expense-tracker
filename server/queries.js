@@ -1,20 +1,34 @@
-const getAllUsers = 'SELECT users.* FROM users';
+/* eslint-disable no-multi-str */
+
+const getAllUsers = "SELECT users.* FROM users";
 
 //do another subquery within query starting on line 8 to grab all tags associated with a transaction
 //something like ...FROM transactions JOIN (SELECT json_agg(row_to_json(table_alias)))
 
+// this won't return an id when the ON CONFLICT clause fires, instead will get null?
+const insertOrDoNothingTag =
+  "INSERT INTO tags (tag_name) VALUES ($1) \
+ON CONFLICT (tag_name) DO NOTHING \
+RETURNING id";
+
+// create the association between a transaction and a single tag - would call this multiple times for every added for a transaction
+// insert the transaction_id as first query param, and tag_id as second query param
+const insertTagOnTransaction =
+  "INSERT INTO tags_transactions (transaction_id, tag_id)\
+  VALUES ($1, $2)";
+
 const getUserIdTransactions = //WIP to query single user, all their transactions, and all tags for all their transactions
-  'SELECT t.* FROM \
+  "SELECT t.* FROM \
     (SELECT id, name, email, \
     (SELECT json_agg(row_to_json(transactions)) \
       FROM transactions \
         WHERE user_id = users.id) AS user_transactions \
         FROM users \
           WHERE id = $1\
-    ) t';
+    ) t";
 
 const followUpUserId =
-  'SELECT transactions.*, json_agg(tags.*) as tags \
+  "SELECT transactions.*, json_agg(tags.*) as tags \
    FROM \
     transactions \
     JOIN \
@@ -27,19 +41,19 @@ const followUpUserId =
     tags_transactions.tag_id = tags.id \
     WHERE transactions.user_id = $1 \
     GROUP BY transactions.id \
-    ORDER BY transactions.transaction_date DESC';
+    ORDER BY transactions.transaction_date DESC";
 
 //do I just want to grab tags for specific transactionId, or grab the specific transaction along with all associated tags, and just pass down transaction info down from front end -- my answer is grab the user and all (or some) transactions with transactions joined to tags
 
 const postNewUser =
-  'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *';
+  "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *";
 
 const postNewUserTransaction =
-  'INSERT INTO transactions (description, amount, date, user_id) VALUES ($1, $2, $3, $4) RETURNING *';
+  "INSERT INTO transactions (description, amount, user_id) VALUES ($1, $2, $3) RETURNING *";
 
-const postNewTags = '';
+const postNewTags = "";
 
-const postNewTransactionsTags = '';
+const postNewTransactionsTags = "";
 
 // select users.*, json_agg(f) from (select row_to_json(t) AS transactions from
 // (select * from transactions where user_id = users.id) t) f
@@ -48,14 +62,14 @@ const postNewTransactionsTags = '';
 // where users.id = 1;
 
 const postTagsOnTransaction =
-  'SELECT t.* AS user FROM \
+  "SELECT t.* AS user FROM \
   (SELECT id, name, email, \
   (SELECT json_agg(row_to_json(row(g))) \
     FROM transactions \
       WHERE user_id = users.id) AS user_transactions \
       FROM users \
         WHERE id = 1\
-  ) t';
+  ) t";
 
 // this query selects a single transaction with id = 2, as well as all the tag_ids associated with that transaction from the tags_transactions table
 
@@ -64,19 +78,19 @@ const postTagsOnTransaction =
 // -- to tags
 
 const kindOfWorks =
-  'select transactions.*, tags_transactions.* from \
+  "select transactions.*, tags_transactions.* from \
 transactions JOIN tags_transactions \
 on transactions.id = tags_transactions.transaction_id \
-where transactions.id = 2';
+where transactions.id = 2";
 
 const alsoWorksSortOf =
-  'SELECT json_agg(t) FROM (SELECT transactions.*, \
+  "SELECT json_agg(t) FROM (SELECT transactions.*, \
 tags.* \
 from transactions \
 join tags_transactions \
 on transactions.id = tags_transactions.transaction_id \
 join tags on tags.id = tags_transactions.tag_id \
-where transactions.id = 2) t';
+where transactions.id = 2) t";
 
 module.exports = {
   getAllUsers,
@@ -88,4 +102,7 @@ module.exports = {
   alsoWorksSortOf,
   postNewTags,
   postNewTransactionsTags,
+  insertOrDoNothingTag,
+  insertTagOnTransaction,
+  kindOfWorks,
 };

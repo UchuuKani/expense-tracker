@@ -18,6 +18,10 @@ const UserProfile = ({ userId }: Props) => {
   // for now, will avoid typing [user] with an interface, e.g. IUser because syntax is confusing
   const [userStatus] = useAxios(`/api/users/${userId}`);
 
+  // TODO: figure out how I should manage the state here: want to be able to add, delete, and update the transaction list and
+  // user data - as of now, TransactionList does not update because the userTransactions prop is only passed down once and
+  // does not change as the current useEffect in useAxios only runs once on mount
+
   return (
     <div>
       {userStatus.current === "success" && (
@@ -39,7 +43,7 @@ const UserProfile = ({ userId }: Props) => {
       )}
       {userStatus.current === "pending" && <div>Loading...</div>}
       {userStatus.current === "error" && <div>{userStatus.error.message}</div>}
-      <AddTransaction />
+      <AddTransaction userId={userId} />
     </div>
   );
 };
