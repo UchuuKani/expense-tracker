@@ -11,6 +11,11 @@ interface Props {
   };
 }
 
+export interface IUser {
+  name: string;
+  email: string;
+}
+
 const User = ({ user }: Props) => {
   const { name, email } = user;
   return (

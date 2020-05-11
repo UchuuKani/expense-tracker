@@ -24,6 +24,10 @@ const AddTransaction = ({ userId }: Props) => {
         amount,
         tags,
       });
+
+      setDescription("");
+      setAmount("");
+      setTags("");
     } catch (e) {
       console.error(e);
     }

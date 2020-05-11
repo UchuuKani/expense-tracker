@@ -1,20 +1,21 @@
-import { useState, useEffect, useReducer } from "react";
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import { useEffect, useReducer } from "react";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-export interface RState {
+// TODO: rewrite or figure out cleaner logic and cleaner API
+export interface RState<T> {
   current: string;
-  response?: any;
+  response?: T | any;
   error?: any;
 }
 
-const initialState: RState = {
+const initialState: RState<any> = {
   current: "idle",
-  response: undefined,
-  error: undefined,
+  response: null,
+  error: null,
 };
 
 const dataFetchReducer = (
-  state: RState,
+  state: RState<any>,
   action: { type: string; payload?: any }
 ) => {
   switch (action.type) {
@@ -32,10 +33,8 @@ const dataFetchReducer = (
 };
 
 // Axios has typings directly from its repo - AxiosRequestConfig interface has all potential config options on it as optional fields
-export default (url: string, config?: AxiosRequestConfig) => {
-  // const [response, setResponse] = useState({});
-  // const [loading, setLoading] = useState(false);
-  const [status, dispatch]: [RState, any] = useReducer(
+export default function useAxios<R>(url: string, config?: AxiosRequestConfig) {
+  const [status, dispatch]: [RState<R>, any] = useReducer(
     dataFetchReducer,
     initialState
   );
@@ -86,4 +85,4 @@ export default (url: string, config?: AxiosRequestConfig) => {
   }, []);
 
   return [status];
-};
+}

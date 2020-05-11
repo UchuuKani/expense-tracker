@@ -7,6 +7,8 @@ interface Props {
 }
 
 const TransactionList = ({ userTransactions }: Props) => {
+  console.log("transaction list", userTransactions);
+
   return (
     <table className="transaction-list">
       <tbody>
@@ -15,9 +17,12 @@ const TransactionList = ({ userTransactions }: Props) => {
           <th>Amount</th>
           <th>Date</th>
         </tr>
-        {userTransactions.map((transaction) => {
-          return <Transaction key={transaction.id} transaction={transaction} />;
-        })}
+        {userTransactions.length &&
+          userTransactions.map((transaction) => {
+            return (
+              <Transaction key={transaction.id} transaction={transaction} />
+            );
+          })}
       </tbody>
     </table>
   );

@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { ITag } from "./Tag";
 
 interface Props {
   transaction: ITransaction;
@@ -9,6 +10,8 @@ export interface ITransaction {
   amount: number;
   transaction_date: string;
   id: number;
+  user_id: number;
+  tags: Array<ITag>;
 }
 
 const Transaction = ({ transaction }: Props) => {
