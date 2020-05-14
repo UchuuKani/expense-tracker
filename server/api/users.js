@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const client = require("../db");
 const extendedQueries = require("../queries");
-const { tagParser } = require("../../utils");
+const { tagParser, insertTagQueryGenerator } = require("../../utils");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -28,6 +28,8 @@ router.get("/:id", async (req, res, next) => {
 
     const userData = user.rows[0];
 
+    // flaw with followUpUserId query is that if a transaction does not have tags associated with it in the join table, this query
+    // will not find that transaction
     const query = extendedQueries.followUpUserId;
     const { rows } = await client.query(query, [req.params.id]);
 
@@ -60,8 +62,9 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-//QUERY NOT COMPLETE - DOES NOT ADD TO TAGS JOIN TABLE
-//posts a new transcation for a specific user, and includes tags
+// QUERY NOT COMPLETE - DOES NOT ADD TO TAGS JOIN TABLE
+// posts a new transcation for a specific user, and includes tags
+// TODO: probably want to add some validation either on backend or frontend at some point
 router.post("/:id", async (req, res, next) => {
   try {
     let { description, amount, date, tags } = req.body;
@@ -89,23 +92,51 @@ router.post("/:id", async (req, res, next) => {
 
     let [transactionResponse] = rows;
     let transactionId = transactionResponse.id;
-    console.log("row data", transactionResponse);
 
     // try to create every tag in the list in the database
     // output is an array of the length of tags - current query does not work as expected - tags seem to be posted but no
     // return values
-    const insertTagsArr = await Promise.all(
-      processedTags.map((tag) => {
-        return client.query(insertOrDoNothingTag, [tag]);
-      })
-    );
+    // insertOrDoNothing is og query here, just testing only insert with unique tag names
+    const queryTags = processedTags.map((tag) => {
+      return client.query(insertOrDoNothingTag, [tag]);
+    });
 
-    // assume insertTagsArr is an array of numbers representing the id's for all the tags that were inserted
-    // make associations in tags_transactions table
-    await Promise.all(
-      insertTagsArr.map((id) => {
-        return client.query(insertTagOnTransaction, [transactionId, id]);
-      })
+    const insertTagsArr = await Promise.all(queryTags);
+
+    const idArray = insertTagsArr.map((res) => {
+      return res.rows[0] ? res.rows[0].id : null;
+    });
+
+    // idArray will be a mixed array containing numbers and null values potentially
+    // want to map position in idArray to existing tag value by matching on processedTags array
+    // e.g. idArray might look like [43, 17, null] and processedTags might look like [groceries, food, alcohol] - in this case, it
+    // would mean `groceries` and `food` are new tags being added for the first time, while `alcohol` already existed
+    // want to find that null (index 3) is mapped to the existing tag `alcohol` (index 3) and either:
+    // find the `id` of the existing tag in the DB (alcohol) and swap out the null value in `idArray` OR
+    // when trying to insert into join table below, update the function to handle null values by looking up tags by name
+
+    // first option - create map of (index in array, id in DB || null value) - for every null value, perform query to get tag_id
+    // WHERE tag_name = processedTags[index], then create final array that has all tag_ids and use that array in below query
+
+    for (let i = 0; i < idArray.length; i++) {
+      // entry is a number representing the tag_id of a given tag in the db
+      let entry = idArray[i];
+
+      if (entry == null) {
+        let existingTagName = processedTags[i];
+        let foundTagId = await client.query(
+          "SELECT tags.id FROM tags WHERE tag_name = $1",
+          [existingTagName]
+        );
+
+        idArray[i] = foundTagId.rows[0].id;
+      }
+    }
+
+    // create association in join table between created transaction and multiple tags from the insertTagsArr
+    await client.query(
+      insertTagQueryGenerator(transactionId, idArray.length),
+      idArray
     );
 
     res.json(transactionResponse); //rewrite to send back newly created task or redirect to task list for user

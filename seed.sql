@@ -39,6 +39,7 @@ INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM 
 INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM users WHERE name = 'Nataly'), 'The Switch', 35000);
 INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM users WHERE name = 'Alex'), 'Japan Village snacks', 2000);
 INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM users WHERE name = 'Hetty'), 'Garlic, onions and eye of newt', 1200);
+INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM users WHERE name = 'Hetty'), 'Gigantic hat', 999);
 INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM users WHERE name = 'Nataly'), 'Empanada ingredients', 1500);
 INSERT INTO transactions (user_id, description, amount) VALUES ((SELECT id FROM users WHERE name = 'Alphard'), 'Big old TV', 10000000);
 

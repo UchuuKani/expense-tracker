@@ -27,6 +27,8 @@ const getUserIdTransactions = //WIP to query single user, all their transactions
           WHERE id = $1\
     ) t";
 
+// flaw here is that if a transaction does not have tags associated with it in the join table, this query will not find that
+// transaction
 const followUpUserId =
   "SELECT transactions.*, json_agg(tags.*) as tags \
    FROM \
