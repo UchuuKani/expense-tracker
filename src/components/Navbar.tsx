@@ -1,15 +1,15 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { NavLink } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar: React.FunctionComponent = () => {
   return (
     <nav className="navbar">
-      <Link to="/users" className="link-button">
+      <NavLink to="/users" className="link-button">
         All Users
-      </Link>
-      <Link to="/tags" className="link-button">
+      </NavLink>
+      <NavLink to="/tags" className="link-button">
         All Tags
-      </Link>
+      </NavLink>
     </nav>
   );
 };

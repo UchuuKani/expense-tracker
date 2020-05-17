@@ -19,7 +19,9 @@ const Routes = () => {
       />
       <Route
         path="/users/:userId"
-        render={({ match }) => <UserProfile userId={match.params.userId} />}
+        // I'll be honest, don't really understand how below line (render=...) works to pass route params from React Router
+        // render={({ match }) => <UserProfile userId={match.params.userId} />}
+        component={UserProfile}
       />{" "}
       {/* this pattern for passing down route props more performant I believe? - supposed to prevent re-renders or something, a reference is below
       https://learnwithparam.com/blog/how-to-pass-props-in-react-router/

@@ -62,8 +62,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-// QUERY NOT COMPLETE - DOES NOT ADD TO TAGS JOIN TABLE
-// posts a new transcation for a specific user, and includes tags
+// posts a new transcation for a specific user, and includes tags - does not currently allow for posting a date
 // TODO: probably want to add some validation either on backend or frontend at some point
 router.post("/:id", async (req, res, next) => {
   try {
@@ -76,11 +75,7 @@ router.post("/:id", async (req, res, next) => {
     // tagParser(tags: string): string[]
     const processedTags = tagParser(tags);
 
-    const {
-      postNewUserTransaction,
-      insertOrDoNothingTag,
-      insertTagOnTransaction,
-    } = extendedQueries;
+    const { postNewUserTransaction, insertOrDoNothingTag } = extendedQueries;
 
     // post transaction to transactions table
     // rows is an array that contains a single object with transaction's id, user_id, description, amount, and transaction_date

@@ -8,71 +8,83 @@ import TransactionList from "./TransactionList";
 import AddTransaction from "./AddTransaction";
 import LoadingSpinner from "./common/Spinner";
 import { ITransaction } from "./Transaction";
+import { RouteComponentProps } from "react-router-dom";
 
-// for props, we are only bringing a prop called userId and using that in a custom hook to fetch data
-interface Props {
-  userId: number;
+// not entirely sure what MatchParams and Props extends RouteComponentProps<MatchParams> does behind the scenes to make TS work
+// but my understanding is RouteComponentProps brings in the implcitly passed props from using a component (UserProfile here) in
+// a <Route />. Idea for doing this is seen in below SO link
+// https://stackoverflow.com/questions/48138111/what-typescript-type-should-i-use-to-reference-the-match-object-in-my-props
+interface MatchParams {
+  userId: string;
 }
 
-interface REvent {
-  type: string;
-  payload?: any;
+interface Props extends RouteComponentProps<MatchParams> {}
+
+// don't understand above typing stuff going on
+
+interface Response {
+  id: number;
+  name: string;
+  email: string;
+  transactions: ITransaction[];
 }
 
-interface UResponse {
-  user: {
-    id: number;
-    name: string;
-    email: string;
-    transactions: Array<ITransaction>;
-  };
+interface State<T> {
+  status: string;
+  user: T | null;
+  error: Error | null;
 }
 
-const initialState = {
-  status: "pending",
-  user: {},
-  error: null,
-};
+type Action<T> =
+  | { type: "PENDING" }
+  | { type: "SUCCESS"; payload: T }
+  | { type: "ERROR"; payload: any }
+  | { type: "ADD_TRANSACTION"; payload: ITransaction }
+  | { type: "REMOVE_TRANSACTION"; payload: string };
 
-function profileReducer(
-  state: { status: string; user: UResponse; error: any },
-  event: REvent
-) {
-  switch (event.type) {
+const createProfileReducer = <T extends Response>() => (
+  state: State<T>,
+  action: Action<T>
+) => {
+  switch (action.type) {
     case "PENDING":
       return { ...state, status: "pending" };
     case "SUCCESS":
-      return { ...state, status: "success", user: event.payload };
+      return { ...state, status: "success", user: action.payload };
     case "ERROR":
-      return { ...state, status: "error", error: event.payload };
+      return { ...state, status: "error", error: action.payload };
+    case "ADD_TRANSACTION":
+      return state.user && state.user.transactions.length
+        ? {
+            ...state,
+            user: {
+              ...state.user,
+              transactions: [action.payload, ...state.user.transactions],
+            },
+          }
+        : { ...state };
     default:
       return state;
   }
-}
+};
 
-const UserProfile = ({ userId }: Props) => {
+const UserProfile: React.FunctionComponent<Props> = (props) => {
   // want to use a useReducer call for user transactions
   // also potentially want to use a state machine to handle the logic in the useAxios hook for handling loading, fetching, error,
   // and other potential states (does what I said even make sense?)
   // for now, will avoid typing [user] with an interface, e.g. IUser because syntax is confusing
-
-  const [userState, dispatch] = useReducer(profileReducer, initialState);
-
-  async function fetchUser() {
-    try {
-      const { data } = await axios.get(`/api/users/${userId}`);
-
-      dispatch({ type: "SUCCESS", payload: data });
-    } catch (error) {
-      dispatch({ type: "ERROR", payload: error });
-    }
-  }
+  const profileReducer = createProfileReducer<Response>();
+  const [userState, dispatch] = useReducer(profileReducer, {
+    status: "pending",
+    user: null,
+    error: null,
+  });
 
   useEffect(() => {
-    fetchUser();
-    return () => {
-      console.log("component unmounting");
-    };
+    axios
+      .get(`/api/users/${props.match.params.userId}`)
+      .then((res) => dispatch({ type: "SUCCESS", payload: res.data }))
+      .catch((error) => dispatch({ type: "ERROR", payload: error }));
   }, []);
   console.log("the state should be set plz", userState);
 
@@ -81,17 +93,25 @@ const UserProfile = ({ userId }: Props) => {
   // does not change as the current useEffect in useAxios only runs once on mount
   // more importantly, no way to delete a transaction currently because of above problem with how my state is set up
 
+  const addNewTransaction = (
+    actionFn: any,
+    transaction: ITransaction
+  ): void => {
+    dispatch(actionFn(transaction));
+  };
+
   return (
     <div>
       {userState.status === "success" && (
         <div id="test">
           {/* I was previously passing user={user.id} into the User component so the `Name` and `Email` fields were not being 
           rendered. No error from TS though...why is that? */}
-          <User user={userState.user} />
+          {userState.user && (
+            <User name={userState.user.name} email={userState.user.email} />
+          )}
           <div>
             <h2>Transactions</h2>
-            {Array.isArray(userState.user.transactions) &&
-            userState.user.transactions.length > 0 ? (
+            {userState.user && userState.user.transactions.length > 0 ? (
               <TransactionList userTransactions={userState.user.transactions} />
             ) : (
               <h3>No posted transactions</h3>
@@ -101,7 +121,10 @@ const UserProfile = ({ userId }: Props) => {
       )}
       {userState.status === "pending" && <LoadingSpinner />}
       {userState.status === "error" && <div>{userState.error.message}</div>}
-      <AddTransaction userId={userId} />
+      <AddTransaction
+        userId={props.match.params.userId}
+        addNewTransaction={addNewTransaction}
+      />
     </div>
   );
 };

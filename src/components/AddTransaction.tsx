@@ -1,14 +1,30 @@
 import React, { useState, FormEvent, ChangeEvent } from "react";
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
+
+import { ITransaction } from "./Transaction";
 
 // use FormEvent to type the submit event in the form
 // use ChangeEvent to type the onChange events
 
 interface Props {
-  userId: number;
+  userId: string;
+  addNewTransaction: (actionFn: any, transaction: ITransaction) => void;
 }
 
-const AddTransaction = ({ userId }: Props) => {
+interface ServerResponse {
+  data: ITransaction;
+}
+
+function addTransactionCreator(
+  transaction: ITransaction
+): { type: string; payload: ITransaction } {
+  return { type: "ADD_TRANSACTION", payload: transaction };
+}
+
+const AddTransaction: React.FunctionComponent<Props> = ({
+  userId,
+  addNewTransaction,
+}) => {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [tags, setTags] = useState("");
@@ -19,15 +35,16 @@ const AddTransaction = ({ userId }: Props) => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
-      const transactionData = await axios.post(`/api/users/${userId}`, {
+      const { data } = await axios.post<ITransaction>(`/api/users/${userId}`, {
         description,
         amount,
         tags,
       });
-
+      console.log("the transaction", data);
       setDescription("");
       setAmount("");
       setTags("");
+      addNewTransaction(addTransactionCreator, data);
     } catch (e) {
       console.error(e);
     }

@@ -5,10 +5,8 @@ import React from "react";
 // e.g. I am expecting to receive a prop called `user` and a user can have more than email and name fields, but I am only
 // using those fields to render the User component
 interface Props {
-  user: {
-    name: string;
-    email: string;
-  };
+  name: string;
+  email: string;
 }
 
 export interface IUser {
@@ -16,8 +14,7 @@ export interface IUser {
   email: string;
 }
 
-const User = ({ user }: Props) => {
-  const { name, email } = user;
+const User: React.FunctionComponent<Props> = ({ name, email }) => {
   return (
     <div className="user">
       <h2>User Info</h2>

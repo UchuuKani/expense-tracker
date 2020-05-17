@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { IUser } from "./User";
 
-const UserList = () => {
-  const [users, setUsers]: [any, any] = useState({ users: [] });
+const UserList: React.FunctionComponent = () => {
+  const [users, setUsers] = useState<IUser[]>([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const { data } = await axios.get("/api/users");
-      setUsers(data);
-    };
-
-    fetchUsers();
+    axios.get("/api/users").then((res) => setUsers(res.data));
   }, []);
 
   return (

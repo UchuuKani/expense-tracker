@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const LandingPage = () => {
+const LandingPage: React.FunctionComponent = () => {
   return (
     <div>
       <h1>Henlo World</h1>
