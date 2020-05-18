@@ -52,38 +52,57 @@ const AddTransaction: React.FunctionComponent<Props> = ({
 
   return (
     <form onSubmit={handleSubmit} className="add-transaction">
-      <label htmlFor="transactionDescription">Description</label>
-      <input
-        type="text"
-        name="transactionDescription"
-        value={description}
-        onChange={(event: ChangeEvent<HTMLInputElement>): void =>
-          setDescription(event.target.value)
-        }
-      ></input>
-      <label htmlFor="transactionAmount">Amount</label>
-      <input
-        type="text"
-        name="transactionAmount"
-        value={amount}
-        onChange={(event: ChangeEvent<HTMLInputElement>) =>
-          setAmount(event.target.value)
-        }
-      ></input>
-      <div>
-        <label htmlFor="tags">
-          Please enter tags as a comma separated list
-        </label>
-        <input
-          type="text"
-          name="tags"
-          value={tags}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            setTags(event.target.value)
-          }
-        ></input>
-      </div>
-      <button type="submit">Submit</button>
+      <ul className="flex-outer">
+        <li>
+          <label id="description-label" htmlFor="transactionDescription">
+            Description
+          </label>
+          <input
+            id="transaction-description"
+            type="text"
+            name="transactionDescription"
+            value={description}
+            onChange={(event: ChangeEvent<HTMLInputElement>): void =>
+              setDescription(event.target.value)
+            }
+            placeholder="Enter description"
+          ></input>
+        </li>
+        <li>
+          <label id="transaction-amount" htmlFor="transactionAmount">
+            Amount
+          </label>
+          <input
+            type="text"
+            name="transactionAmount"
+            value={amount}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              setAmount(event.target.value)
+            }
+            placeholder="Enter amount"
+          ></input>
+        </li>
+        <li>
+          <label id="add-tags-label" htmlFor="tags">
+            Tags
+          </label>
+          <input
+            id="tags-input"
+            type="text"
+            name="tags"
+            value={tags}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              setTags(event.target.value)
+            }
+            placeholder="Enter tags as a comma separated list"
+          ></input>
+        </li>
+        <li>
+          <button id="add-transaction-btn" type="submit">
+            Submit
+          </button>
+        </li>
+      </ul>
     </form>
   );
 };

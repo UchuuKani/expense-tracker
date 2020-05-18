@@ -10,6 +10,12 @@ const Navbar: React.FunctionComponent = () => {
       <NavLink to="/tags" className="link-button">
         All Tags
       </NavLink>
+      <NavLink to="/" className="link-button">
+        Sign Up
+      </NavLink>
+      <NavLink to="/" className="link-button">
+        Sign In
+      </NavLink>
     </nav>
   );
 };
