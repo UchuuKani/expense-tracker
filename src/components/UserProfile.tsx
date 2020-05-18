@@ -40,7 +40,7 @@ type Action<T> =
   | { type: "SUCCESS"; payload: T }
   | { type: "ERROR"; payload: any }
   | { type: "ADD_TRANSACTION"; payload: ITransaction }
-  | { type: "REMOVE_TRANSACTION"; payload: string };
+  | { type: "REMOVE_TRANSACTION"; payload: number };
 
 const createProfileReducer = <T extends Response>() => (
   state: State<T>,
@@ -60,6 +60,18 @@ const createProfileReducer = <T extends Response>() => (
             user: {
               ...state.user,
               transactions: [action.payload, ...state.user.transactions],
+            },
+          }
+        : { ...state };
+    case "REMOVE_TRANSACTION":
+      return state.user && state.user.transactions.length
+        ? {
+            ...state,
+            user: {
+              ...state.user,
+              transactions: state.user.transactions.filter((transaction) => {
+                return transaction.id !== action.payload;
+              }),
             },
           }
         : { ...state };
@@ -100,6 +112,10 @@ const UserProfile: React.FunctionComponent<Props> = (props) => {
     dispatch(actionFn(transaction));
   };
 
+  const removeTransaction = (transactionId: number): void => {
+    dispatch({ type: "REMOVE_TRANSACTION", payload: transactionId });
+  };
+
   return (
     <div>
       {userState.status === "success" && (
@@ -112,7 +128,10 @@ const UserProfile: React.FunctionComponent<Props> = (props) => {
           <div>
             <h2>Transactions</h2>
             {userState.user && userState.user.transactions.length > 0 ? (
-              <TransactionList userTransactions={userState.user.transactions} />
+              <TransactionList
+                userTransactions={userState.user.transactions}
+                removeTransaction={removeTransaction}
+              />
             ) : (
               <h3>No posted transactions</h3>
             )}

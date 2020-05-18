@@ -3,6 +3,7 @@ import { ITag } from "./Tag";
 
 interface Props {
   transaction: ITransaction;
+  removeTransaction: (transactionId: number) => void;
 }
 
 export interface ITransaction {
@@ -14,11 +15,12 @@ export interface ITransaction {
   tags?: ITag[];
 }
 
-const Transaction = ({ transaction }: Props) => {
+const Transaction = ({ transaction, removeTransaction }: Props) => {
   const { description, amount, transaction_date } = transaction;
 
   return (
     <tr>
+      <td onClick={() => removeTransaction(transaction.id)}>X</td>
       <td>{description}</td>
       <td>${(amount / 100).toFixed(2)}</td>
       <td>{transaction_date}</td>
