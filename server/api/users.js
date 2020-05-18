@@ -140,4 +140,26 @@ router.post("/:id", async (req, res, next) => {
   }
 });
 
+router.delete("/:id", async (req, res, next) => {
+  try {
+    // currently since I am display all user transactions on one page and don't have a separate page to view them, to delete, I
+    // am only using the transactionId to determine which row should be deleted in transactions table, and which row(s) should be
+    // deleted in the tags_transactions table
+
+    const { transactionId } = req.body;
+
+    // need to delete from tags_transactions join table first because it contains a foreign key from the transactions table
+    // when I tried to delete from transactions table first, got an error saying a foreign key constraint was being violated
+    const { deleteFromTagsTransactions, deleteTransaction } = extendedQueries;
+
+    await client.query(deleteFromTagsTransactions, [transactionId]);
+
+    await client.query(deleteTransaction, [transactionId]);
+
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

@@ -94,6 +94,11 @@ on transactions.id = tags_transactions.transaction_id \
 join tags on tags.id = tags_transactions.tag_id \
 where transactions.id = 2) t";
 
+const deleteFromTagsTransactions =
+  "DELETE FROM tags_transactions WHERE tags_transactions.transaction_id = $1";
+
+const deleteTransaction = "DELETE FROM transactions WHERE transactions.id = $1";
+
 module.exports = {
   getAllUsers,
   getUserIdTransactions,
@@ -107,4 +112,6 @@ module.exports = {
   insertOrDoNothingTag,
   insertTagOnTransaction,
   kindOfWorks,
+  deleteFromTagsTransactions,
+  deleteTransaction,
 };
