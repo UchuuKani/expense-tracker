@@ -113,7 +113,16 @@ const UserProfile: React.FunctionComponent<Props> = (props) => {
   };
 
   const removeTransaction = (transactionId: number): void => {
-    dispatch({ type: "REMOVE_TRANSACTION", payload: transactionId });
+    axios
+      .delete(`/api/users/${props.match.params.userId}`, {
+        data: {
+          transactionId,
+        },
+      })
+      .then(() => {
+        dispatch({ type: "REMOVE_TRANSACTION", payload: transactionId });
+      })
+      .catch((err) => dispatch({ type: "ERROR", payload: err }));
   };
 
   return (
