@@ -17,9 +17,8 @@ router.get("/", async (req, res, next) => {
 //gets a user and all of their transactions
 router.get("/:id", async (req, res, next) => {
   try {
-    console.log("start of GET to /api/users/:id");
     const userQuery = "SELECT users.* FROM users WHERE id = $1";
-    console.log("query to get all user data");
+
     const user = await client.query(userQuery, [req.params.id]);
 
     if (!user.rows.length) {
@@ -33,10 +32,8 @@ router.get("/:id", async (req, res, next) => {
     // flaw with followUpUserId query is that if a transaction does not have tags associated with it in the join table, this query
     // will not find that transaction (maybe is null instead?)
     const query = extendedQueries.followUpUserId;
-    console.log("line before flawed query");
-    const { rows } = await client.query(query, [req.params.id]);
 
-    console.log("rows for user with untagged transactions", rows);
+    const { rows } = await client.query(query, [req.params.id]);
 
     const userWithTransactions = { ...userData, transactions: rows };
 
