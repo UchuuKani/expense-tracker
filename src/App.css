@@ -22,6 +22,12 @@ body {
   justify-content: space-around;
 }
 
+footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
 /*link to navbar link style here: https://www.w3schools.com/css/css_link.asp*/
 .link-button {
   background-color: lightgrey;

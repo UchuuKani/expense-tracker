@@ -113,6 +113,8 @@ const UserProfile: React.FunctionComponent<Props> = (props) => {
   };
 
   const removeTransaction = (transactionId: number): void => {
+    // so far not able to cause the DELETE request to error out on back end by passing an invalid transactionId (either one that
+    // doesn't exist or empty request body) - should I check the query to see how to cause an error?
     axios
       .delete(`/api/users/${props.match.params.userId}`, {
         data: {

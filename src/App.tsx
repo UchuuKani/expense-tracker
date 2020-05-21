@@ -3,13 +3,15 @@ import "./App.css";
 import React from "react";
 
 import Routes from "./components/Routes";
-import Navbar from "./components/Navbar";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
     <div className="App">
-      <Navbar />
+      <Header />
       <Routes />
+      <Footer />
     </div>
   );
 };
