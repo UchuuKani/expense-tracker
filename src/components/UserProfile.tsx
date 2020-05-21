@@ -146,14 +146,14 @@ const UserProfile: React.FunctionComponent<Props> = (props) => {
               <h3>No posted transactions</h3>
             )}
           </div>
+          <AddTransaction
+            userId={props.match.params.userId}
+            addNewTransaction={addNewTransaction}
+          />
         </div>
       )}
       {userState.status === "pending" && <LoadingSpinner />}
       {userState.status === "error" && <div>{userState.error.message}</div>}
-      <AddTransaction
-        userId={props.match.params.userId}
-        addNewTransaction={addNewTransaction}
-      />
     </div>
   );
 };
