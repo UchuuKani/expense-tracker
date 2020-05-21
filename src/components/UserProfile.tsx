@@ -98,7 +98,6 @@ const UserProfile: React.FunctionComponent<Props> = (props) => {
       .then((res) => dispatch({ type: "SUCCESS", payload: res.data }))
       .catch((error) => dispatch({ type: "ERROR", payload: error }));
   }, []);
-  console.log("the state should be set plz", userState);
 
   // TODO: figure out how I should manage the state here: want to be able to add, delete, and update the transaction list and
   // user data - as of now, TransactionList does not update because the userTransactions prop is only passed down once and

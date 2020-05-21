@@ -17,7 +17,9 @@ router.get("/", async (req, res, next) => {
 //gets a user and all of their transactions
 router.get("/:id", async (req, res, next) => {
   try {
+    console.log("start of GET to /api/users/:id");
     const userQuery = "SELECT users.* FROM users WHERE id = $1";
+    console.log("query to get all user data");
     const user = await client.query(userQuery, [req.params.id]);
 
     if (!user.rows.length) {
@@ -29,9 +31,12 @@ router.get("/:id", async (req, res, next) => {
     const userData = user.rows[0];
 
     // flaw with followUpUserId query is that if a transaction does not have tags associated with it in the join table, this query
-    // will not find that transaction
+    // will not find that transaction (maybe is null instead?)
     const query = extendedQueries.followUpUserId;
+    console.log("line before flawed query");
     const { rows } = await client.query(query, [req.params.id]);
+
+    console.log("rows for user with untagged transactions", rows);
 
     const userWithTransactions = { ...userData, transactions: rows };
 
@@ -91,7 +96,7 @@ router.post("/:id", async (req, res, next) => {
     // try to create every tag in the list in the database
     // output is an array of the length of tags - current query does not work as expected - tags seem to be posted but no
     // return values
-    // insertOrDoNothing is og query here, just testing only insert with unique tag names
+
     const queryTags = processedTags.map((tag) => {
       return client.query(insertOrDoNothingTag, [tag]);
     });
@@ -119,6 +124,7 @@ router.post("/:id", async (req, res, next) => {
 
       if (entry == null) {
         let existingTagName = processedTags[i];
+
         let foundTagId = await client.query(
           "SELECT tags.id FROM tags WHERE tag_name = $1",
           [existingTagName]
@@ -129,10 +135,12 @@ router.post("/:id", async (req, res, next) => {
     }
 
     // create association in join table between created transaction and multiple tags from the insertTagsArr
-    await client.query(
-      insertTagQueryGenerator(transactionId, idArray.length),
-      idArray
-    );
+    if (idArray.length > 0) {
+      await client.query(
+        insertTagQueryGenerator(transactionId, idArray.length),
+        idArray
+      );
+    }
 
     res.json(transactionResponse); //rewrite to send back newly created task or redirect to task list for user
   } catch (err) {

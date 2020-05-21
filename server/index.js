@@ -27,8 +27,8 @@ app.use((err, req, res, next) => {
 
     res.status(404).send("You fugged up my dude");
   } else {
-    console.error(err);
-    res.send("Server fugged");
+    console.error(err, err.message);
+    res.send("server fugged");
   }
 });
 
