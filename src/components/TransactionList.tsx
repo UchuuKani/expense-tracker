@@ -11,6 +11,7 @@ const TransactionList: React.FunctionComponent<Props> = ({
   userTransactions,
   removeTransaction,
 }) => {
+  // console.log("number of all transactions for a user", userTransactions.length);
   return (
     <table className="transaction-list">
       <tbody>

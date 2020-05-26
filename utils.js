@@ -46,4 +46,7 @@ function insertTagQueryGenerator(transactionId, numTags) {
   return insertStr.slice(0, -2);
 }
 
+const dupeFollowup =
+  "SELECT transactions.*, json_agg(tags.*) as tags FROM transactions JOIN tags_transactions ON transactions.id = tags_transactions.transaction_id JOIN tags ON tags_transactions.tag_id = tags.id WHERE transactions.user_id = $1 GROUP BY transactions.id ORDER BY transactions.transaction_date DESC";
+
 module.exports = { tagParser, insertTagQueryGenerator };

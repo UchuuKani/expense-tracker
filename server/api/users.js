@@ -31,9 +31,21 @@ router.get("/:id", async (req, res, next) => {
 
     // flaw with followUpUserId query is that if a transaction does not have tags associated with it in the join table, this query
     // will not find that transaction (maybe is null instead?)
-    const query = extendedQueries.followUpUserId;
+    const query = extendedQueries.followUpUserId; // flawed query donut use atm - 5/22/2020
+    // allTransactionsQuery simply selects all of a users transactions without trying to join them with their tags
+    const allTransactionsQuery =
+      "SELECT * FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC";
+    // joinOnlyOnJoinTable tries to select all transactions, and tag_ids joined left-joined on the tags_transactions join table
+    // seems to return a different number of responses than allTransactionsQuery with duplicate transaction rows for every unique tag
+    // associated with it? - not what I want
+    const joinOnlyOnJoinTable =
+      "select transactions.*, tags_transactions.tags_transactions_id from transactions left join tags_transactions on transactions.id = tags_transactions.transaction_id where transactions.user_id = $1 ORDER By transaction_date DESC";
 
-    const { rows } = await client.query(query, [req.params.id]);
+    // ultimately, want a query that returns all of a users unique transactions, with each transaction object including an array of all
+    // tag objects associated with it {...userStuffGeneratedInFirstQuery, transactions: Transactions[]} where each transaction looks
+    // like {id: number, description: string, amount: number, transaction_date: string, tags: Tag[]} and each Tag looks like
+    // {id: number, tag_name: string}
+    const { rows } = await client.query(allTransactionsQuery, [req.params.id]);
 
     const userWithTransactions = { ...userData, transactions: rows };
 
