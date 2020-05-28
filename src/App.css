@@ -72,19 +72,19 @@ footer {
   width: 5em;
 }
 
+#add-transaction-btn:hover {
+  background-color: green;
+}
+
 #tags-input {
-  width: 25.5rem;
+  width: 15.5rem;
 }
 
-#description-label {
+.transaction-label {
   float: left;
 }
 
-#transaction-amount {
-  float: left;
-}
-
-#add-tags-label {
-  float: left;
+.transaction-input {
+  border-radius: 5px;
 }
 /* everything above needs to be changed as html has changed */

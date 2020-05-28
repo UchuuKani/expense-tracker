@@ -54,11 +54,11 @@ const AddTransaction: React.FunctionComponent<Props> = ({
     <form onSubmit={handleSubmit} className="add-transaction">
       <ul className="flex-outer">
         <li>
-          <label id="description-label" htmlFor="transactionDescription">
+          <label className="transaction-label" htmlFor="transactionDescription">
             Description
           </label>
           <input
-            id="transaction-description"
+            className="transaction-input"
             type="text"
             name="transactionDescription"
             value={description}
@@ -69,10 +69,11 @@ const AddTransaction: React.FunctionComponent<Props> = ({
           ></input>
         </li>
         <li>
-          <label id="transaction-amount" htmlFor="transactionAmount">
+          <label className="transaction-label" htmlFor="transactionAmount">
             Amount
           </label>
           <input
+            className="transaction-input"
             type="text"
             name="transactionAmount"
             value={amount}
@@ -83,10 +84,11 @@ const AddTransaction: React.FunctionComponent<Props> = ({
           ></input>
         </li>
         <li>
-          <label id="add-tags-label" htmlFor="tags">
+          <label className="transaction-label" htmlFor="tags">
             Tags
           </label>
           <input
+            className="transaction-input"
             id="tags-input"
             type="text"
             name="tags"
