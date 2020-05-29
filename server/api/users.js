@@ -33,8 +33,8 @@ router.get("/:id", async (req, res, next) => {
     // will not find that transaction (maybe is null instead?)
     const query = extendedQueries.followUpUserId; // flawed query donut use atm - 5/22/2020
     // allTransactionsQuery simply selects all of a users transactions without trying to join them with their tags
-    const allTransactionsQuery =
-      "SELECT * FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC";
+    const { allTransactions } = extendedQueries;
+
     // joinOnlyOnJoinTable tries to select all transactions, and tag_ids joined left-joined on the tags_transactions join table
     // seems to return a different number of responses than allTransactionsQuery with duplicate transaction rows for every unique tag
     // associated with it? - not what I want
@@ -45,7 +45,7 @@ router.get("/:id", async (req, res, next) => {
     // tag objects associated with it {...userStuffGeneratedInFirstQuery, transactions: Transactions[]} where each transaction looks
     // like {id: number, description: string, amount: number, transaction_date: string, tags: Tag[]} and each Tag looks like
     // {id: number, tag_name: string}
-    const { rows } = await client.query(allTransactionsQuery, [req.params.id]);
+    const { rows } = await client.query(allTransactions, [req.params.id]);
 
     const userWithTransactions = { ...userData, transactions: rows };
 
@@ -58,6 +58,25 @@ router.get("/:id", async (req, res, next) => {
 
     res.send(userWithTransactions);
   } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/:id/transactions/:transactionId", async (req, res, next) => {
+  try {
+    const { transactionId } = req.params;
+    const { getSingleTransactionWithTags } = extendedQueries;
+
+    const foundTransactionWithTags = await client.query(
+      getSingleTransactionWithTags,
+      [transactionId]
+    );
+
+    const transactionData = foundTransactionWithTags.rows[0].full_transaction;
+    console.log("transaction data", transactionData);
+    res.send(transactionData);
+  } catch (err) {
+    console.error(err);
     next(err);
   }
 });

@@ -1,5 +1,4 @@
 import React from "react";
-
 import Transaction, { ITransaction } from "./Transaction";
 
 interface Props {
@@ -12,6 +11,7 @@ const TransactionList: React.FunctionComponent<Props> = ({
   removeTransaction,
 }) => {
   // console.log("number of all transactions for a user", userTransactions.length);
+  console.log("transaction date formatted?", userTransactions);
   return (
     <table className="transaction-list">
       <tbody>

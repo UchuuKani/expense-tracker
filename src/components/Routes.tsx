@@ -5,6 +5,7 @@ import Test from "./Test";
 import LandingPage from "./LandingPage";
 import UserList from "./UserList";
 import UserProfile from "./UserProfile";
+import SingleTransaction from "./SingleTransaction";
 
 const Routes = () => {
   return (
@@ -15,7 +16,7 @@ const Routes = () => {
       <Route exact path="/users" component={UserList} />
       <Route
         path="/users/:userId/transactions/:transactionId"
-        component={Test}
+        component={SingleTransaction}
       />
       <Route
         path="/users/:userId"
