@@ -1,9 +1,18 @@
 /* eslint-disable no-multi-str */
 
+// gets all of a user's info - used as one query in GET /api/users/:id to grab only user info
 const getAllUsers = "SELECT users.* FROM users";
 
+// gets a single user's info
+const userQuery = "SELECT users.* FROM users WHERE id = $1";
+
+// gets all of a user's transactions in GET /api/users/:id route - result is added onto getAllUsers query above
 const allTransactions =
-  "SELECT id, user_id, description, amount, transaction_date  FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC";
+  "SELECT id, user_id, description, amount, transaction_date FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC";
+
+const userWithTransactionsNoTags =
+  "SELECT id, name, email, (SELECT JSON_AGG(ts) FROM \
+  (SELECT * FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC) ts) AS transactions FROM users WHERE id = $1;";
 
 const getSingleTransactionWithTags =
   "SELECT ROW_TO_JSon(whole_transaction) AS full_transaction \
@@ -13,9 +22,6 @@ const getSingleTransactionWithTags =
     ) tgs \
   ) AS tags \
 FROM transactions WHERE transactions.id = $1) whole_transaction";
-
-//do another subquery within query starting on line 8 to grab all tags associated with a transaction
-//something like ...FROM transactions JOIN (SELECT JSon_AGG(row_to_json(table_alias)))
 
 // this won't return an id when the on ConFLICT clause fires, instead will get null?
 const insertOrDoNothingTag =
@@ -29,7 +35,8 @@ const insertTagOnTransaction =
   "INSERT INTO tags_transactions (transaction_id, tag_id)\
   VALUES ($1, $2)";
 
-const getUserIdTransactions = //WIP to query single user, all their transactions, and all tags for all their transactions
+const _DEPRECATED_getUserIdTransactions = //WIP to query single user, all their transactions, and all tags for all their transactions
+  // 5/30/2020 - no longer using query, only keeping for reference
   "SELECT t.* FROM \
     (SELECT id, name, email, \
     (SELECT JSon_AGG(row_to_json(transactions)) \
@@ -41,7 +48,7 @@ const getUserIdTransactions = //WIP to query single user, all their transactions
 
 // flaw here is that if a transaction does not have tags associated with it in the JOIN table, this query will not find that
 // transaction
-const followUpUserId =
+const _DEPRECATED_followUpUserId = // 5/30/2020 - no longer using query, only keeping for reference - maybe revisit to use?
   "SELECT transactions.*, JSon_AGG(tags.*) as tags \
    FROM \
     transactions \
@@ -65,25 +72,11 @@ const postNewUser =
 const postNewUserTransaction =
   "INSERT INTO transactions (description, amount, user_id) VALUES ($1, $2, $3) RETURNING *";
 
-const postNewTags = "";
-
-const postNewTransactionsTags = "";
-
 // SELECT users.*, JSon_AGG(f) FROM (SELECT row_to_json(t) AS transactions FROM
 // (SELECT * FROM transactions where user_id = users.id) t) f
 // JOIN users
 // on users.id = transactions.id
 // where users.id = 1;
-
-const postTagsOnTransaction =
-  "SELECT t.* AS user FROM \
-  (SELECT id, name, email, \
-  (SELECT JSon_AGG(row_to_json(row(g))) \
-    FROM transactions \
-      WHERE user_id = users.id) AS user_transactions \
-      FROM users \
-        WHERE id = 1\
-  ) t";
 
 // this query SELECTs a single transaction with id = 2, as well as all the tag_ids associated with that transaction FROM the tags_transactions table
 
@@ -113,14 +106,10 @@ const deleteTransaction = "DELETE FROM transactions WHERE transactions.id = $1";
 
 module.exports = {
   getAllUsers,
-  getUserIdTransactions,
-  followUpUserId,
+  userQuery,
   postNewUser,
-  postNewUserTransaction, //not written
-  postTagsOnTransaction, //not written,
+  postNewUserTransaction,
   alsoWorksSortOf,
-  postNewTags,
-  postNewTransactionsTags,
   insertOrDoNothingTag,
   insertTagOnTransaction,
   kindOfWorks,
@@ -128,4 +117,5 @@ module.exports = {
   deleteTransaction,
   getSingleTransactionWithTags,
   allTransactions,
+  userWithTransactionsNoTags,
 };

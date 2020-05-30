@@ -25,10 +25,10 @@ app.use((err, req, res, next) => {
   if (err.status === 404) {
     console.error(err);
 
-    res.status(404).send("You fugged up my dude");
+    res.status(404).send("You fugged up my dude: 404");
   } else {
     console.error(err, err.message);
-    res.send("server fugged");
+    res.status(500).send("server fugged: 500");
   }
 });
 

@@ -17,46 +17,25 @@ router.get("/", async (req, res, next) => {
 //gets a user and all of their transactions
 router.get("/:id", async (req, res, next) => {
   try {
-    const userQuery = "SELECT users.* FROM users WHERE id = $1";
+    const userWithTransactions = await client.query(
+      extendedQueries.userWithTransactionsNoTags,
+      [req.params.id]
+    );
 
-    const user = await client.query(userQuery, [req.params.id]);
-
-    if (!user.rows.length) {
+    if (!userWithTransactions.rows.length) {
       const new404 = new Error("User not found");
       new404.status = 404;
       throw new404;
     }
 
-    const userData = user.rows[0];
-
-    // flaw with followUpUserId query is that if a transaction does not have tags associated with it in the join table, this query
-    // will not find that transaction (maybe is null instead?)
-    const query = extendedQueries.followUpUserId; // flawed query donut use atm - 5/22/2020
-    // allTransactionsQuery simply selects all of a users transactions without trying to join them with their tags
-    const { allTransactions } = extendedQueries;
-
-    // joinOnlyOnJoinTable tries to select all transactions, and tag_ids joined left-joined on the tags_transactions join table
-    // seems to return a different number of responses than allTransactionsQuery with duplicate transaction rows for every unique tag
-    // associated with it? - not what I want
-    const joinOnlyOnJoinTable =
-      "select transactions.*, tags_transactions.tags_transactions_id from transactions left join tags_transactions on transactions.id = tags_transactions.transaction_id where transactions.user_id = $1 ORDER By transaction_date DESC";
+    const userData = userWithTransactions.rows[0];
 
     // ultimately, want a query that returns all of a users unique transactions, with each transaction object including an array of all
     // tag objects associated with it {...userStuffGeneratedInFirstQuery, transactions: Transactions[]} where each transaction looks
     // like {id: number, description: string, amount: number, transaction_date: string, tags: Tag[]} and each Tag looks like
     // {id: number, tag_name: string}
-    const { rows } = await client.query(allTransactions, [req.params.id]);
 
-    const userWithTransactions = { ...userData, transactions: rows };
-
-    // this 404 check is in place for when I only make one query instead of two
-    // if (!rows.length) {
-    //   const new404 = new Error('User not found');
-    //   new404.status = 404;
-    //   throw new404;
-    // }
-
-    res.send(userWithTransactions);
+    res.send(userData); // send userWithTransactions
   } catch (err) {
     next(err);
   }
@@ -99,7 +78,7 @@ router.post("/", async (req, res, next) => {
 // TODO: probably want to add some validation either on backend or frontend at some point
 router.post("/:id", async (req, res, next) => {
   try {
-    let { description, amount, date, tags } = req.body;
+    const { description, amount, date, tags } = req.body;
     // request body comes in as {description: string, amount: string, tags: string, date: string}
     // amount needs to be parsed into a number and then multiplied by 100 to convert from dollars to cents
     // tags comes in as a string and should be processed into an array of type string, string[] - this will be done by the tagParser utility function
