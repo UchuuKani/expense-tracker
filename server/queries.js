@@ -10,6 +10,22 @@ const userQuery = "SELECT users.* FROM users WHERE id = $1";
 const allTransactions =
   "SELECT id, user_id, description, amount, transaction_date FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC";
 
+// gets all of a user's transactions and loads all tag rows (1 null row for every transaction with no tags) - does not convert to json
+const _DEPRECATED_allTransactionsWithTagsAsRows =
+  "select * from transactions left join tags_transactions tg on (transactions.id = tg.transaction_id) left join tags g on (tg.tag_id = g.id) where transactions.user_id = $1";
+
+// same as allTransactionsWithTagsAsRows query, except loads all tags onto each transaction as an array
+const allTransactionsWithTagsArray =
+  "SELECT transactions.*, json_agg(g.tag_name) AS tags \
+    FROM transactions \
+    LEFT JOIN tags_transactions tg \
+    ON (transactions.id = tg.transaction_id) \
+    LEFT JOIN tags g \
+    ON (tg.tag_id = g.id) \
+    WHERE transactions.user_id = $1 \
+    GROUP BY transactions.id \
+    ORDER BY transactions.transaction_date DESC";
+
 const userWithTransactionsNoTags =
   "SELECT id, name, email, (SELECT JSON_AGG(ts) FROM \
   (SELECT * FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC) ts) AS transactions FROM users WHERE id = $1;";
@@ -118,4 +134,5 @@ module.exports = {
   getSingleTransactionWithTags,
   allTransactions,
   userWithTransactionsNoTags,
+  allTransactionsWithTagsArray,
 };
