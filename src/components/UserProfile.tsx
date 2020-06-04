@@ -54,7 +54,7 @@ const createProfileReducer = <T extends Response>() => (
     case "ERROR":
       return { ...state, status: "error", error: action.payload };
     case "ADD_TRANSACTION":
-      return state.user && state.user.transactions.length
+      return state.user && state.user.transactions.length >= 0
         ? {
             ...state,
             user: {

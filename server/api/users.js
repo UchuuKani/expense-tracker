@@ -27,9 +27,12 @@ router.get("/:id", async (req, res, next) => {
       new404.status = 404;
       throw new404;
     }
-
     const userData = userWithTransactions.rows[0];
-
+    // with current query userWithTransactions, if user has no transactions the transactions field is null - so we set the transactions
+    // property as an empty array if they don't have any transactions for easier logic on front end render
+    if (userData.transactions === null) {
+      userData.transactions = [];
+    }
     // ultimately, want a query that returns all of a users unique transactions, with each transaction object including an array of all
     // tag objects associated with it {...userStuffGeneratedInFirstQuery, transactions: Transactions[]} where each transaction looks
     // like {id: number, description: string, amount: number, transaction_date: string, tags: Tag[]} and each Tag looks like
@@ -79,6 +82,7 @@ router.post("/", async (req, res, next) => {
 router.post("/:id", async (req, res, next) => {
   try {
     const { description, amount, date, tags } = req.body;
+
     // request body comes in as {description: string, amount: string, tags: string, date: string}
     // amount needs to be parsed into a number and then multiplied by 100 to convert from dollars to cents
     // tags comes in as a string and should be processed into an array of type string, string[] - this will be done by the tagParser utility function
@@ -93,7 +97,7 @@ router.post("/:id", async (req, res, next) => {
     // rows is an array that contains a single object with transaction's id, user_id, description, amount, and transaction_date
     const { rows } = await client.query(postNewUserTransaction, [
       description,
-      parseInt(amount),
+      parseInt(amount * 100),
       req.params.id,
     ]);
 
@@ -148,7 +152,7 @@ router.post("/:id", async (req, res, next) => {
         idArray
       );
     }
-
+    console.log("transaction response...", transactionResponse);
     res.json(transactionResponse); //rewrite to send back newly created task or redirect to task list for user
   } catch (err) {
     next(err);

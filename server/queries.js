@@ -15,6 +15,7 @@ const _DEPRECATED_allTransactionsWithTagsAsRows =
   "select * from transactions left join tags_transactions tg on (transactions.id = tg.transaction_id) left join tags g on (tg.tag_id = g.id) where transactions.user_id = $1";
 
 // same as allTransactionsWithTagsAsRows query, except loads all tags onto each transaction as an array
+// if a user has no transactions, then this query returns nothing/undefined in Node console
 const allTransactionsWithTagsArray =
   "SELECT transactions.*, json_agg(g.tag_name) AS tags \
     FROM transactions \
