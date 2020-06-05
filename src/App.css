@@ -66,25 +66,33 @@ footer {
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
-
-#add-transaction-btn {
-  height: 2em;
-  width: 5em;
+/* stylings in between here and next comment are based off of https://webdesign.tutsplus.com/tutorials/building-responsive-forms-with-flexbox--cms-26767 */
+.flex-outer li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 1em auto;
 }
 
-#add-transaction-btn:hover {
-  background-color: green;
+.flex-outer > li > label {
+  flex: 1 0 120px;
+  max-width: 220px;
 }
 
-#tags-input {
-  width: 15.5rem;
+.flex-outer > li > label + * {
+  flex: 1 0 220px;
 }
 
-.transaction-label {
+.flex-outer > li > button {
+  flex: 1 0 220px;
+}
+/* comment block end of website */
+
+/* .transaction-label {
   float: left;
-}
+} */
 
 .transaction-input {
-  border-radius: 5px;
+  outline: auto;
 }
 /* everything above needs to be changed as html has changed */
