@@ -4,7 +4,8 @@ DROP TABLE IF EXISTS users, transactions, tags, tags_transactions;
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   name TEXT NOT NULL,
-  email VARCHAR(255) NOT NULL UNIQUE
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE transactions (
@@ -27,11 +28,11 @@ CREATE TABLE tags_transactions (
 );
 
 -- users
-INSERT INTO users (name, email) VALUES ('Alex', 'alex@email.com');
-INSERT INTO users (name, email) VALUES ('Nataly', 'nataly@email.com');
-INSERT INTO users (name, email) VALUES ('Hetty', 'hetty1336@example.com');
-INSERT INTO users (name, email) VALUES ('Alphard', 'apha@example.com');
-INSERT INTO users (name, email) VALUES ('Notransactions', 'none@example.com');
+INSERT INTO users (name, email, password) VALUES ('Alex', 'alex@email.com', 'test');
+INSERT INTO users (name, email, password) VALUES ('Nataly', 'nataly@email.com', 'test');
+INSERT INTO users (name, email, password) VALUES ('Hetty', 'hetty1336@example.com', 'test');
+INSERT INTO users (name, email, password) VALUES ('Alphard', 'apha@example.com', 'test');
+INSERT INTO users (name, email, password) VALUES ('Notransactions', 'none@example.com', 'test');
 
 
 -- transactions

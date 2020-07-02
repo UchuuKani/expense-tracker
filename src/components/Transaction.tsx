@@ -16,12 +16,18 @@ export interface ITransaction {
 }
 
 const Transaction = ({ transaction, removeTransaction }: Props) => {
-  const { description, amount, transaction_date } = transaction;
+  let { description, amount, transaction_date } = transaction;
+
+  let truncDescription;
+
+  if (description.length > 30) {
+    truncDescription = description.slice(0, 30) + "...";
+  } else truncDescription = "";
 
   return (
-    <tr>
+    <tr className="transaction-row">
       <td onClick={() => removeTransaction(transaction.id)}>X</td>
-      <td>{description}</td>
+      <td>{truncDescription ? truncDescription : description}</td>
       <td>${(amount / 100).toFixed(2)}</td>
       <td>{transaction_date}</td>
     </tr>

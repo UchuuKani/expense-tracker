@@ -5,6 +5,11 @@
   margin: 20px;
   padding: 20px;
   border: 1px solid green;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  outline: 1px solid purple;
 }
 
 body {
@@ -17,15 +22,23 @@ body {
 }
 
 .navbar {
-  border: 1px solid black;
+  outline: 1px solid black;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  margin: 1.5em 0 1.5em 0;
+}
+
+.navbar > * {
+  color: green;
 }
 
 footer {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  outline: 1px solid green;
+  margin-top: 2.5em;
+  margin-bottom: 0;
 }
 
 /*link to navbar link style here: https://www.w3schools.com/css/css_link.asp*/
@@ -45,6 +58,11 @@ footer {
 .transaction-list {
   display: flex;
   flex-direction: column;
+  outline: 1px solid green;
+}
+
+.transaction-row {
+  outline: 1px solid green;
 }
 
 /* AddTransaction form styling */
@@ -53,7 +71,11 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  border: 1px solid blue;
+  outline: 1px solid blue;
+}
+
+.user-heading {
+  outline: 1px solid grey;
 }
 
 .add-transaction > ul > li {

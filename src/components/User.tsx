@@ -17,7 +17,7 @@ export interface IUser {
 
 const User: React.FunctionComponent<Props> = ({ name, email }) => {
   return (
-    <div className="user">
+    <div className="user-heading">
       <h2>User Info</h2>
       <h3>Username: {name}</h3>
       <h3>Email: {email}</h3>

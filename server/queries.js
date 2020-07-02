@@ -3,6 +3,8 @@
 // gets all of a user's info - used as one query in GET /api/users/:id to grab only user info
 const getAllUsers = "SELECT users.* FROM users";
 
+const findUserByEmail = "SELECT * FROM users WHERE users.email = $1";
+
 // gets a single user's info
 const userQuery = "SELECT users.* FROM users WHERE id = $1";
 
@@ -84,7 +86,7 @@ const _DEPRECATED_followUpUserId = // 5/30/2020 - no longer using query, only ke
 //do I just want to grab tags for specific transactionId, or grab the specific transaction along with all associated tags, and just pass down transaction info down FROM front end -- my answer is grab the user and all (or some) transactions with transactions JOINed to tags
 
 const postNewUser =
-  "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *";
+  "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING name, email, id";
 
 const postNewUserTransaction =
   "INSERT INTO transactions (description, amount, user_id) VALUES ($1, $2, $3) RETURNING *";
@@ -136,4 +138,5 @@ module.exports = {
   allTransactions,
   userWithTransactionsNoTags,
   allTransactionsWithTagsArray,
+  findUserByEmail,
 };
