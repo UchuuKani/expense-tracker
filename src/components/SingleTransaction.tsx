@@ -21,7 +21,7 @@ const SingleTransaction: React.FunctionComponent<Props> = (props) => {
       .get(`/api/users/${userId}/transactions/${transactionId}`)
       .then((res) => setTransaction(res.data))
       .catch((err) => console.error(err));
-  }, []);
+  }, [transactionId, userId]);
 
   return (
     <>

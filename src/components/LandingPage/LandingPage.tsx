@@ -8,11 +8,11 @@ const LandingPage: React.FunctionComponent = () => {
       <h2>This is an app to manually log your transactions</h2>
       <article>{new Array(100).fill("Lorem ipsum").join("")}</article>
       <h2>Sign up and sign in will be available later</h2>
-      <ul>
+      {/* <ul>
         {new Array(25).fill(1).map((space, idx) => {
           return <li key={idx}>Take up space</li>;
         })}
-      </ul>
+      </ul> */}
     </div>
   );
 };

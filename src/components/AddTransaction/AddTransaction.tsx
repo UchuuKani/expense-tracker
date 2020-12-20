@@ -1,7 +1,8 @@
 import React, { useState, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 
-import { ITransaction } from "./Transaction";
+import { ITransaction } from "../Transaction";
+import styles from "./AddTransaction.module.scss";
 
 // use FormEvent to type the submit event in the form
 // use ChangeEvent to type the onChange events
@@ -51,7 +52,7 @@ const AddTransaction: React.FunctionComponent<Props> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="add-transaction">
+    <form onSubmit={handleSubmit} className={styles["add-transaction"]}>
       <ul className="flex-outer">
         <li>
           <label className="transaction-label" htmlFor="transactionDescription">
@@ -100,7 +101,7 @@ const AddTransaction: React.FunctionComponent<Props> = ({
           ></input>
         </li>
         <li>
-          <button id="add-transaction-btn" type="submit">
+          <button className="submit" type="submit">
             Submit
           </button>
         </li>

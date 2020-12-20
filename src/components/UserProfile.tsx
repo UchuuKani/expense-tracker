@@ -5,7 +5,7 @@ import axios from "axios";
 //of their transactions in <TranscationList /> => individual <Transcation />
 import User from "./User";
 import TransactionList from "./TransactionList";
-import AddTransaction from "./AddTransaction";
+import AddTransaction from "./AddTransaction/AddTransaction";
 import LoadingSpinner from "./common/Spinner";
 import { ITransaction } from "./Transaction";
 import { RouteComponentProps } from "react-router-dom";
@@ -97,7 +97,7 @@ const UserProfile: React.FunctionComponent<Props> = (props) => {
       .get(`/api/users/${props.match.params.userId}`)
       .then((res) => dispatch({ type: "SUCCESS", payload: res.data }))
       .catch((error) => dispatch({ type: "ERROR", payload: error }));
-  }, []);
+  }, [props.match.params.userId]);
 
   // TODO: figure out how I should manage the state here: want to be able to add, delete, and update the transaction list and
   // user data - as of now, TransactionList does not update because the userTransactions prop is only passed down once and
