@@ -1,7 +1,9 @@
 import * as React from "react";
 import axios from "axios";
+
 import { RouteComponentProps } from "react-router-dom";
-import { ITransaction } from "./Transaction";
+import { ITransaction } from "../Transaction/Transaction";
+import styles from "./TransactionSummary.module.scss";
 
 interface MatchParams {
   userId: string;
@@ -25,7 +27,7 @@ const SingleTransaction: React.FunctionComponent<Props> = (props) => {
 
   return (
     <>
-      <table className="transaction-list">
+      <table className={styles["transaction-summary"]}>
         <tbody>
           <tr>
             <th>Description</th>

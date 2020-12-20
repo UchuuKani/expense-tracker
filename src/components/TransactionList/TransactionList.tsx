@@ -1,5 +1,7 @@
 import React from "react";
-import Transaction, { ITransaction } from "./Transaction";
+
+import Transaction, { ITransaction } from "../Transaction/Transaction";
+import styles from "./TransactionList.module.scss";
 
 interface Props {
   userTransactions: ITransaction[];
@@ -13,7 +15,7 @@ const TransactionList: React.FunctionComponent<Props> = ({
   // console.log("number of all transactions for a user", userTransactions.length);
   console.log("transaction date formatted?", userTransactions);
   return (
-    <table className="transaction-list">
+    <table className={styles["transaction-list"]}>
       <tbody>
         <tr>
           <th></th>

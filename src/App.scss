@@ -20,6 +20,7 @@ body {
   height: max-content;
 }
 
+// styling for the footer html tag
 footer {
   display: flex;
   flex-direction: row;
@@ -27,46 +28,9 @@ footer {
   outline: 1px solid green;
   margin-top: 2.5em;
   margin-bottom: 0;
+  padding: 1.5em;
 }
 
-/*link to navbar link style here: https://www.w3schools.com/css/css_link.asp*/
-.link-button {
-  background-color: lightgrey;
-  border-radius: 10px;
-  color: black;
-  padding: 14px 25px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-}
-
-/* UserProfile composed of several components - User, TransactionList (which is composed with Transaction) and AddTransaction */
-
-/* TransactionList styling */
-.transaction-list {
-  display: flex;
-  flex-direction: column;
-  outline: 1px solid green;
-}
-
-.transaction-row {
-  outline: 1px solid green;
-}
-
-.user-heading {
-  outline: 1px solid grey;
-}
-
-.add-transaction > ul > li {
-  list-style: none;
-}
-
-/* everything below needs to be changed as html has changed */
-#test {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-}
 /* stylings in between here and next comment are based off of https://webdesign.tutsplus.com/tutorials/building-responsive-forms-with-flexbox--cms-26767 */
 .flex-outer li {
   display: flex;
@@ -88,8 +52,3 @@ footer {
   flex: 1 0 220px;
 }
 /* comment block end of website */
-
-.transaction-input {
-  outline: auto;
-}
-/* everything above needs to be changed as html has changed */

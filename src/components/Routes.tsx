@@ -4,8 +4,8 @@ import { Route, Switch, withRouter } from "react-router-dom";
 import Test from "./Test";
 import LandingPage from "./LandingPage/LandingPage";
 import UserList from "./UserList";
-import UserProfile from "./UserProfile";
-import SingleTransaction from "./SingleTransaction";
+import UserProfile from "./UserProfile/UserProfile";
+import SingleTransaction from "./TransactionSummary/TransactionSummary";
 
 const Routes = () => {
   return (

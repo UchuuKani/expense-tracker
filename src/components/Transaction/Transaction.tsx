@@ -1,5 +1,7 @@
 import React from "react";
-import { ITag } from "./Tag";
+
+import { ITag } from "../Tag/Tag";
+import styles from "./Transaction.module.scss";
 
 interface Props {
   transaction: ITransaction;
@@ -25,7 +27,7 @@ const Transaction = ({ transaction, removeTransaction }: Props) => {
   } else truncDescription = "";
 
   return (
-    <tr className="transaction-row">
+    <tr className={styles["transaction-row"]}>
       <td onClick={() => removeTransaction(transaction.id)}>X</td>
       <td>{truncDescription ? truncDescription : description}</td>
       <td>${(amount / 100).toFixed(2)}</td>

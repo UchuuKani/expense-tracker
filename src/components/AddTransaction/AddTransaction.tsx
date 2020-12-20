@@ -1,7 +1,7 @@
 import React, { useState, FormEvent, ChangeEvent } from "react";
 import axios from "axios";
 
-import { ITransaction } from "../Transaction";
+import { ITransaction } from "../Transaction/Transaction";
 import styles from "./AddTransaction.module.scss";
 
 // use FormEvent to type the submit event in the form
@@ -59,7 +59,6 @@ const AddTransaction: React.FunctionComponent<Props> = ({
             Description
           </label>
           <input
-            className="transaction-input"
             type="text"
             name="transactionDescription"
             value={description}

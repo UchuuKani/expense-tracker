@@ -3,12 +3,13 @@ import axios from "axios";
 
 //this component represents the profile for a single user, and should render all
 //of their transactions in <TranscationList /> => individual <Transcation />
-import User from "./User";
-import TransactionList from "./TransactionList";
-import AddTransaction from "./AddTransaction/AddTransaction";
-import LoadingSpinner from "./common/Spinner";
-import { ITransaction } from "./Transaction";
+import User from "../User/User";
+import TransactionList from "../TransactionList/TransactionList";
+import AddTransaction from "../AddTransaction/AddTransaction";
+import LoadingSpinner from "../common/Spinner";
+import { ITransaction } from "../Transaction/Transaction";
 import { RouteComponentProps } from "react-router-dom";
+import styles from "./UserProfile.module.scss";
 
 // not entirely sure what MatchParams and Props extends RouteComponentProps<MatchParams> does behind the scenes to make TS work
 // but my understanding is RouteComponentProps brings in the implcitly passed props from using a component (UserProfile here) in
@@ -127,9 +128,9 @@ const UserProfile: React.FunctionComponent<Props> = (props) => {
   };
 
   return (
-    <div>
+    <>
       {userState.status === "success" && (
-        <div id="test">
+        <div className={styles["user-profile-container"]}>
           {/* I was previously passing user={user.id} into the User component so the `Name` and `Email` fields were not being 
           rendered. No error from TS though...why is that? */}
           {userState.user && (
@@ -154,7 +155,7 @@ const UserProfile: React.FunctionComponent<Props> = (props) => {
       )}
       {userState.status === "pending" && <LoadingSpinner />}
       {userState.status === "error" && <div>{userState.error.message}</div>}
-    </div>
+    </>
   );
 };
 

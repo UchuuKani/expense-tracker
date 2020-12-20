@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { IUser } from "./User";
+import { IUser } from "./User/User";
 import Spinner from "./common/Spinner";
 
 const UserList: React.FunctionComponent = () => {

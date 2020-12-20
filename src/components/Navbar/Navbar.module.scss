@@ -3,8 +3,20 @@
   display: flex;
   justify-content: space-between;
   margin: 1.5em 0 1.5em 0;
+  padding: 1.5em;
 }
 
 .navbar > * {
   color: green;
+}
+
+/*link to navbar link style here: https://www.w3schools.com/css/css_link.asp*/
+.link-button {
+  background-color: lightgrey;
+  border-radius: 10px;
+  color: black;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
 }

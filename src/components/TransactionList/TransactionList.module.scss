@@ -1,0 +1,8 @@
+/* TransactionList styling */
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  outline: 1px solid green;
+  border-spacing: 1em;
+  background-color: rgb(201, 191, 191);
+}

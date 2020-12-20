@@ -5,16 +5,16 @@ import styles from "./Navbar.module.scss";
 const Navbar: React.FunctionComponent = () => {
   return (
     <nav className={styles.navbar}>
-      <NavLink to="/users" className="link-button">
+      <NavLink to="/users" className={styles["link-button"]}>
         All Users
       </NavLink>
-      <NavLink to="/tags" className="link-button">
+      <NavLink to="/tags" className={styles["link-button"]}>
         All Tags
       </NavLink>
-      <NavLink to="/" className="link-button">
+      <NavLink to="/" className={styles["link-button"]}>
         Sign Up
       </NavLink>
-      <NavLink to="/" className="link-button">
+      <NavLink to="/" className={styles["link-button"]}>
         Sign In
       </NavLink>
     </nav>
