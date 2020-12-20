@@ -1,3 +1,4 @@
+@import "./globalVariables.scss";
 .App {
   text-align: center;
   background: #f5f5f5;
@@ -14,11 +15,6 @@
 
 body {
   background-color: lightgrey;
-}
-
-/* LandingPage styling */
-.landing-page > ul > li {
-  list-style: none;
 }
 
 .navbar {

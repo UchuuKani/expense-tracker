@@ -59,30 +59,29 @@ export default function useAxios<R>(url: string, config?: AxiosRequestConfig) {
     },
   };
 
-  async function axiosCall() {
-    try {
-      stateActions.pending();
-      // not positive how `const {data}` can be typed - Axios provides interfaces for its methods which take generics but this custom hook
-      // is not specific to fetching Users or anything like that
-      // https://github.com/axios/axios/blob/v0.19.0/index.d.ts#L136 - reference for Axios types
-      // https://levelup.gitconnected.com/a-typescript-safe-api-82cc22c4f92d - reference for typing Axios calls
-      // TS doesn't throw an error about the typing of `data` (the Axios response) - is it because the types of the response
-      // bodies are typed with a generic, T, that defaults to type `any`? Hopefully so!
-      const { data } = await axios.request({
-        ...config,
-        url,
-      });
-
-      stateActions.success(data);
-    } catch (err) {
-      console.error(err);
-      stateActions.error(err);
-    }
-  }
-
   useEffect(() => {
+    async function axiosCall() {
+      try {
+        stateActions.pending();
+        // not positive how `const {data}` can be typed - Axios provides interfaces for its methods which take generics but this custom hook
+        // is not specific to fetching Users or anything like that
+        // https://github.com/axios/axios/blob/v0.19.0/index.d.ts#L136 - reference for Axios types
+        // https://levelup.gitconnected.com/a-typescript-safe-api-82cc22c4f92d - reference for typing Axios calls
+        // TS doesn't throw an error about the typing of `data` (the Axios response) - is it because the types of the response
+        // bodies are typed with a generic, T, that defaults to type `any`? Hopefully so!
+        const { data } = await axios.request({
+          ...config,
+          url,
+        });
+
+        stateActions.success(data);
+      } catch (err) {
+        console.error(err);
+        stateActions.error(err);
+      }
+    }
     axiosCall();
-  }, []);
+  }, [config, stateActions, url]);
 
   return [status];
 }

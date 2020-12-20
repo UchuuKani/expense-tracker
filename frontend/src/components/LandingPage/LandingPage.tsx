@@ -1,8 +1,9 @@
 import React from "react";
+import styles from "./LandingPage.module.scss";
 
 const LandingPage: React.FunctionComponent = () => {
   return (
-    <div className="landing-page">
+    <div className={styles.landing}>
       <h1>Expense Logger</h1>
       <h2>This is an app to manually log your transactions</h2>
       <article>{new Array(100).fill("Lorem ipsum").join("")}</article>
