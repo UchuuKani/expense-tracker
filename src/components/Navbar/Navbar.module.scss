@@ -1,0 +1,10 @@
+.navbar {
+  outline: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  margin: 1.5em 0 1.5em 0;
+}
+
+.navbar > * {
+  color: green;
+}

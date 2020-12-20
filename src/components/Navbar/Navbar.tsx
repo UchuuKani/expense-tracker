@@ -1,9 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import styles from "./Navbar.module.scss";
 
 const Navbar: React.FunctionComponent = () => {
   return (
-    <nav className="navbar">
+    <nav className={styles.navbar}>
       <NavLink to="/users" className="link-button">
         All Users
       </NavLink>

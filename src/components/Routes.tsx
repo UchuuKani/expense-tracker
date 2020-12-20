@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 
 import Test from "./Test";
-import LandingPage from "./LandingPage";
+import LandingPage from "./LandingPage/LandingPage";
 import UserList from "./UserList";
 import UserProfile from "./UserProfile";
 import SingleTransaction from "./SingleTransaction";
