@@ -6,7 +6,8 @@ const app = express();
 const session = require("express-session");
 const passport = require("passport");
 const dbClient = require("./db");
-// app.use(bodyParser.urlencoded({ extended: false }));
+// import the connect-pg-simple library to use for session store
+const pgSession = require("connect-pg-simple")(session);
 
 passport.serializeUser((user, done) => {
   done(null, user.rows[0].id);
@@ -27,12 +28,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(morgan("dev"));
-
+// creates the session
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "budgeting more things",
     resave: false,
     saveUninitialized: false,
+    store: new pgSession({
+      conString:
+        "postgres://" +
+        process.env.DB_USER +
+        ":" +
+        process.env.DB_PASSWORD +
+        "@" +
+        process.env.DB_HOST +
+        "/" +
+        process.env.DB_DATABASE,
+    }), // per connect-pg-simple docs
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days per connect-pg-simple docs
   })
 );
 
@@ -41,6 +54,17 @@ app.use(passport.session());
 
 app.get("/api/greeting", (req, res) => {
   const name = req.query.name || "World";
+  console.log(
+    "server side, req.session",
+    "postgres://" +
+      process.env.DB_USER +
+      ":" +
+      process.env.DB_PASSWORD +
+      "@" +
+      process.env.DB_HOST +
+      "/" +
+      process.env.DB_DATABASE
+  );
   res.setHeader("Content-Type", "application/json");
   res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
 });
