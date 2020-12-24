@@ -6,6 +6,8 @@ import LandingPage from "./LandingPage/LandingPage";
 import UserList from "./UserList";
 import UserProfile from "./UserProfile/UserProfile";
 import SingleTransaction from "./TransactionSummary/TransactionSummary";
+import SigninForm from "./SigninForm/SigninForm";
+import SignupForm from "./SignupForm/SignupForm";
 
 const Routes = () => {
   return (
@@ -14,6 +16,8 @@ const Routes = () => {
       {/* should determine how to better utilize Switch */}
       <Route exact path="/" component={LandingPage} />
       <Route exact path="/users" component={UserList} />
+      <Route path="/signup" component={SignupForm} />
+      <Route path="/signin" component={SigninForm} />
       <Route
         path="/users/:userId/transactions/:transactionId"
         component={SingleTransaction}
