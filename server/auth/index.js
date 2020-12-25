@@ -6,23 +6,23 @@ router.post("/login", async (req, res, next) => {
   try {
     const { findUserByEmail } = sqlQueries;
     const { email, password } = req.body;
-    console.log("user email", email, password);
+
     let user = await client.query(findUserByEmail, [email]);
-    console.log("=======");
-    console.log("the user", user.rows[0]);
-    console.log("=======");
 
     // pgp returns an array of objects, and if only finding one row, there will be one element as an object
     // if no row matches query, pgp returns an empty array
     if (!user.rows.length) {
-      console.log("no user found by sql query, user.length is 0", email);
       res.status(401).send("Wrong email or password");
     } else if (user.rows[0].password !== password) {
-      console.log("incorrect password");
       res.status(401).send("Wrong email or password");
     } else {
-      console.log("trying to log in =================================");
-      req.login(user, (err) => (err ? next(err) : res.json(user)));
+      req.login(user, (err) => {
+        if (err) {
+          next(err);
+        } else {
+          res.json(user.rows[0]);
+        }
+      });
     }
   } catch (err) {
     console.error(err);
@@ -36,8 +36,14 @@ router.post("/signup", async (req, res, next) => {
     const { name, password, email } = req.body;
 
     const user = await client.query(postNewUser, [name, email, password]);
-    console.log("why not login", user.rows[0]);
-    req.login(user, (err) => (err ? next(err) : res.json(user)));
+
+    req.login(user, (err) => {
+      if (err) {
+        next(err);
+      } else {
+        res.json(user.rows[0]);
+      }
+    });
   } catch (err) {
     const errorDetail = err.detail;
     // error detail looks like: "Key (email)=(alex@email.com) already exists." when trying to sign up with duplicate email
