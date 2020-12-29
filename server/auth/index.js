@@ -20,7 +20,8 @@ router.post("/login", async (req, res, next) => {
         if (err) {
           next(err);
         } else {
-          res.json(user.rows[0]);
+          const { id, name, email } = user.rows[0];
+          res.json({ id, name, email });
         }
       });
     }
@@ -65,7 +66,10 @@ router.post("/logout", async (req, res, next) => {
 router.get("/me", (req, res) => {
   console.log("donde is user ka...", req.user);
   console.log("and this is req.session.passport", req.session.passport);
-  res.json(req.user);
+  console.log(req.user);
+  const unfilterUserData = req.user.rows[0];
+  const { id, name, email } = unfilterUserData;
+  res.json({ id, name, email });
 });
 
 module.exports = router;

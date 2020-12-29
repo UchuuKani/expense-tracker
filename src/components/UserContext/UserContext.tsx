@@ -1,12 +1,12 @@
 import React, { useReducer } from "react";
 
 // reducer event types
-const LOGIN_EVENT = "LOGIN_EVENT";
-const SIGNUP_EVENT = "SIGNUP_EVENT";
-const LOGOUT_EVENT = "LOGOUT_EVENT";
+export const LOGIN_EVENT = "LOGIN_EVENT";
+export const SIGNUP_EVENT = "SIGNUP_EVENT";
+export const LOGOUT_EVENT = "LOGOUT_EVENT";
 
 // interface for defining user state
-interface IUserContext {
+export interface IUserContext {
   name: string;
   email: string;
   id: number;
@@ -41,7 +41,7 @@ interface LogoutEvent {
 // interfaces for events end
 
 // the reducer can receive two types of actions: one for user being logged in and one for user being logged out
-type UserAuthEvent = LoginEvent | LogoutEvent | SignupEvent;
+export type UserAuthEvent = LoginEvent | LogoutEvent | SignupEvent;
 
 // initial user state
 const initUser = {

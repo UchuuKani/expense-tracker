@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
+import { RouteComponentProps, withRouter } from "react-router";
 
 import styles from "./SignupForm.module.scss";
+import { UserContext, SIGNUP_EVENT } from "../UserContext/UserContext";
 
-const SignupForm: React.FC = () => {
+const SignupForm: React.FC<RouteComponentProps> = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const user = useContext(UserContext);
 
   const handleSubmit = async (event: React.FormEvent): Promise<void> => {
     event.preventDefault();
@@ -17,7 +21,8 @@ const SignupForm: React.FC = () => {
         email,
         password,
       });
-      console.log(data);
+      user.send({ type: SIGNUP_EVENT, payload: { ...data } });
+      history.push("/");
     } catch (err) {
       console.error(err);
     }
@@ -51,4 +56,4 @@ const SignupForm: React.FC = () => {
   );
 };
 
-export default SignupForm;
+export default withRouter(SignupForm);

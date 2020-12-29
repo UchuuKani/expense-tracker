@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { withRouter, RouteComponentProps } from "react-router";
 import axios from "axios";
 
 import styles from "./SigninForm.module.scss";
+import { UserContext, LOGIN_EVENT } from "../UserContext/UserContext";
 
-const SigninForm: React.FC = () => {
+const SigninForm: React.FC<RouteComponentProps> = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const user = useContext(UserContext);
 
   const handleSubmit = async (event: React.FormEvent): Promise<void> => {
     event.preventDefault();
@@ -13,25 +17,28 @@ const SigninForm: React.FC = () => {
     console.log("signup email", email);
     console.log("signup password", password);
     try {
-      const { data } = await axios.post("/auth/login", {
+      const userData = await axios.post("/auth/login", {
         email,
         password,
       });
-      console.log(data);
+
+      user.send({ type: LOGIN_EVENT, payload: { ...userData.data } });
+      history.push("/");
     } catch (err) {
+      console.log("what is userData when incorrect password or email?", err);
       console.error(err);
     }
   };
 
   const checkLoggedIn = async (): Promise<void> => {
     try {
-      const message = await axios.post("/auth/logout");
-      console.log(message);
+      const { data } = await axios.get("/auth/me");
+      console.log(data);
     } catch (err) {
       console.error(err);
     }
   };
-
+  console.log("user objjjjjj", user);
   return (
     <div className={styles["signin-container"]}>
       <h2>Sign In</h2>
@@ -63,4 +70,4 @@ const SigninForm: React.FC = () => {
   );
 };
 
-export default SigninForm;
+export default withRouter(SigninForm);

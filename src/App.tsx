@@ -5,14 +5,17 @@ import React from "react";
 import Routes from "./components/Routes";
 import Header from "./components/Header";
 import Footer from "./components/Footer/Footer";
+import { UserContextProvider } from "./components/UserContext/UserContext";
 
 const App = () => {
   return (
-    <div className="App">
-      <Header />
-      <Routes />
-      <Footer />
-    </div>
+    <UserContextProvider>
+      <div className="App">
+        <Header />
+        <Routes />
+        <Footer />
+      </div>
+    </UserContextProvider>
   );
 };
 
