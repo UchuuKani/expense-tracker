@@ -1,4 +1,5 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
+import axios from "axios";
 
 // reducer event types
 export const LOGIN_EVENT = "LOGIN_EVENT";
@@ -84,6 +85,20 @@ export const UserContext = React.createContext<UserContextType>({
 
 export const UserContextProvider: React.FC = ({ children }) => {
   const [state, send] = useReducer(reducer, initUser);
+
+  useEffect(() => {
+    async function checkAuth(): Promise<void> {
+      try {
+        const authUser = await axios.get("/auth/me");
+        const { data } = authUser;
+        send({ type: LOGIN_EVENT, payload: data });
+      } catch (authErr) {
+        console.error(authErr);
+      }
+    }
+
+    checkAuth();
+  }, []);
   const value = { state, send };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

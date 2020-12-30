@@ -73,7 +73,7 @@ router.get("/me", (req, res) => {
     const { id, name, email } = unfilterUserData;
     res.json({ id, name, email });
   } else {
-    res.send("no user found on sesh");
+    res.status(401).send("no user found on sesh");
   }
 });
 
