@@ -101,7 +101,7 @@ router.post("/:id", async (req, res, next) => {
       req.params.id,
     ]);
 
-    let [transactionResponse] = rows;
+    let [transactionResponse] = rows; // equivalent to accessing rows[0] and saving to a variable
     let transactionId = transactionResponse.id;
 
     // try to create every tag in the list in the database
@@ -122,9 +122,9 @@ router.post("/:id", async (req, res, next) => {
     // want to map position in idArray to existing tag value by matching on processedTags array
     // e.g. idArray might look like [43, 17, null] and processedTags might look like [groceries, food, alcohol] - in this case, it
     // would mean `groceries` and `food` are new tags being added for the first time, while `alcohol` already existed
-    // want to find that null (index 3) is mapped to the existing tag `alcohol` (index 3) and either:
+    // want to find that null value (at index 2) is mapped to the existing tag `alcohol` and either:
     // find the `id` of the existing tag in the DB (alcohol) and swap out the null value in `idArray` OR
-    // when trying to insert into join table below, update the function to handle null values by looking up tags by name
+    // when trying to insert into join table below, update the function (did I mean to write query here?) to handle null values by looking up tags by name
 
     // first option - create map of (index in array, id in DB || null value) - for every null value, perform query to get tag_id
     // WHERE tag_name = processedTags[index], then create final array that has all tag_ids and use that array in below query

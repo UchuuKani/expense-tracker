@@ -61,3 +61,4 @@ INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM t
 INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Empanada ingredients'), (SELECT id FROM tags WHERE tag_name = 'groceries'));
 INSERT INTO tags_transactions (transaction_id, tag_id) VALUES ((SELECT id FROM transactions WHERE description = 'Big old TV'), (SELECT id FROM tags WHERE tag_name = 'entertainment'));
 
+

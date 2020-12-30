@@ -7,6 +7,7 @@ const { transactionsUpdateBuilder } = require("../../utils");
 // gets a single transaction based on its transactionId
 router.get("/:transactionId", async (req, res, next) => {
   try {
+    console.log("req . session is alive?!!!!!", req.session);
     const { transactionId } = req.params;
     const { getSingleTransactionWithTags } = extendedQueries;
     console.log(transactionId);
@@ -14,6 +15,11 @@ router.get("/:transactionId", async (req, res, next) => {
       getSingleTransactionWithTags,
       [transactionId]
     );
+    // should only be able to get a transaction's data if the client that is requesting it has an existing and active session with valid userId
+    if (false) {
+      // logic checking if transactionId and req.user (corresponds to client making the request) are able to be matched, and if so proceed. If not able to be
+      // matched, send some authorization error
+    }
 
     // we get the full_transactions property off the db response as the "rows" field looks like row: [{full_transaction: {...data}}]
     const transactionData = foundTransactionWithTags.rows[0].full_transaction;
@@ -73,6 +79,7 @@ router.patch("/:transactionId", async (req, res, next) => {
   );
   let transactionResponseData;
   try {
+    // uncomment THIS when want to actually make this logic affect the db - for now keeping uncommented just to see console logs above
     // if this query fails, should not have to do error checking below the try block since it will be caught by catch block
     // so further logic involving transactionResponseData outside of try/catch shouldn't need to check that transactionResponse is valid?
     // transactionResponseData = await client.query(
@@ -85,6 +92,11 @@ router.patch("/:transactionId", async (req, res, next) => {
 
   // after updating transaction in "transactions" table, also need to update the tags_transactions join table in case any tags were added or removed
   // implement logic later
+  // resources:
+  // postgres docs for inserting: https://www.postgresql.org/docs/12/sql-insert.html
+  // trying to do bulk insert where existing tags just get id sent back, and new fields get inserted and send id back as well:
+  //     https://stackoverflow.com/questions/34708509/how-to-use-returning-with-on-conflict-in-postgresql
+  // other approach to doing above task: https://dba.stackexchange.com/questions/129522/how-to-get-the-id-of-the-conflicting-row-in-upsert
 
   if (transactionResponseData) {
     res.json(transactionResponseData);

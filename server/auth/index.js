@@ -58,18 +58,23 @@ router.post("/signup", async (req, res, next) => {
 });
 
 router.post("/logout", async (req, res, next) => {
+  console.log("req seshhhhhhhhhhhhhhh", req.session, req.user);
   req.logout();
   req.session.destroy();
   res.send("user D-stroyed");
 });
 
 router.get("/me", (req, res) => {
-  console.log("donde is user ka...", req.user);
-  console.log("and this is req.session.passport", req.session.passport);
-  console.log(req.user);
-  const unfilterUserData = req.user.rows[0];
-  const { id, name, email } = unfilterUserData;
-  res.json({ id, name, email });
+  console.log("donde is user ka...", !!req.user);
+  console.log("and this is req.session", req.session);
+
+  if (req.user) {
+    const unfilterUserData = req.user.rows[0];
+    const { id, name, email } = unfilterUserData;
+    res.json({ id, name, email });
+  } else {
+    res.send("no user found on sesh");
+  }
 });
 
 module.exports = router;
