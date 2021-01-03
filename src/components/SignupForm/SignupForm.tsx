@@ -22,7 +22,7 @@ const SignupForm: React.FC<RouteComponentProps> = ({ history }) => {
         password,
       });
       user.send({ type: SIGNUP_EVENT, payload: { ...data } });
-      history.push("/");
+      history.push("/transactions");
     } catch (err) {
       console.error(err);
     }

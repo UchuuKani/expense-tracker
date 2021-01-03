@@ -13,7 +13,7 @@ CREATE TABLE transactions (
   user_id INTEGER REFERENCES users(id) NOT NULL,
   description varchar(255) NOT NULL,
   amount INTEGER NOT NULL,
-  transaction_date TIMESTAMP DEFAULT NOW()
+  transaction_date DATE DEFAULT NOW()::DATE
 );
 
 CREATE TABLE tags (

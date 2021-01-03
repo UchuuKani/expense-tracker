@@ -10,7 +10,7 @@ const userQuery = "SELECT users.* FROM users WHERE id = $1";
 
 // gets all of a user's transactions in GET /api/users/:id route - result is added onto getAllUsers query above
 const allTransactions =
-  "SELECT id, user_id, description, amount, transaction_date FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC";
+  "SELECT id, user_id, description, amount, transaction_date FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC, transactions.id DESC";
 
 // gets all of a user's transactions and loads all tag rows (1 null row for every transaction with no tags) - does not convert to json
 const _DEPRECATED_allTransactionsWithTagsAsRows =
@@ -27,11 +27,11 @@ const allTransactionsWithTagsArray =
     ON (tg.tag_id = g.id) \
     WHERE transactions.user_id = $1 \
     GROUP BY transactions.id \
-    ORDER BY transactions.transaction_date DESC";
+    ORDER BY transactions.transaction_date DESC, transactions.id DESC";
 
 const userWithTransactionsNoTags =
   "SELECT id, name, email, (SELECT JSON_AGG(ts) FROM \
-  (SELECT * FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC) ts) AS transactions FROM users WHERE id = $1;";
+  (SELECT id, user_id, description, amount, DATE(transaction_date) AS transaction_date FROM transactions WHERE user_id = $1 ORDER BY transactions.transaction_date DESC, transactions.id DESC) ts) AS transactions FROM users WHERE id = $1;";
 
 const getSingleTransactionWithTags =
   "SELECT ROW_TO_JSon(whole_transaction) AS full_transaction \
@@ -81,7 +81,7 @@ const _DEPRECATED_followUpUserId = // 5/30/2020 - no longer using query, only ke
     tags_transactions.tag_id = tags.id \
     WHERE transactions.user_id = $1 \
     GROUP BY transactions.id \
-    ORDER BY transactions.transaction_date DESC";
+    ORDER BY transactions.transaction_date DESC, transactions.id DESC";
 
 //do I just want to grab tags for specific transactionId, or grab the specific transaction along with all associated tags, and just pass down transaction info down FROM front end -- my answer is grab the user and all (or some) transactions with transactions JOINed to tags
 
@@ -89,7 +89,7 @@ const postNewUser =
   "INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING name, email, id";
 
 const postNewUserTransaction =
-  "INSERT INTO transactions (description, amount, user_id) VALUES ($1, $2, $3) RETURNING *";
+  "INSERT INTO transactions (description, amount, user_id, transaction_date) VALUES ($1, $2, $3, $4) RETURNING id, user_id, description, amount, DATE(transaction_date) AS transaction_date";
 
 // SELECT users.*, JSon_AGG(f) FROM (SELECT row_to_json(t) AS transactions FROM
 // (SELECT * FROM transactions where user_id = users.id) t) f

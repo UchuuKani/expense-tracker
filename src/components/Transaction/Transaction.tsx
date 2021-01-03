@@ -25,7 +25,7 @@ const Transaction = ({ transaction, removeTransaction }: Props) => {
   if (description.length > 30) {
     truncDescription = description.slice(0, 30) + "...";
   } else truncDescription = "";
-
+  console.log("this is the transaction date", transaction_date);
   return (
     <tr className={styles["transaction-row"]}>
       <td onClick={() => removeTransaction(transaction.id)}>X</td>

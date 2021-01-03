@@ -8,6 +8,7 @@ import UserProfile from "./UserProfile/UserProfile";
 import SingleTransaction from "./TransactionSummary/TransactionSummary";
 import SigninForm from "./SigninForm/SigninForm";
 import SignupForm from "./SignupForm/SignupForm";
+import TransactionsPage from "./TransactionsPage/TransactionsPage";
 
 const Routes = () => {
   return (
@@ -26,6 +27,7 @@ const Routes = () => {
         path="/users/:userId"
         // I'll be honest, don't really understand how below line (render=...) works to pass route params from React Router
         // render={({ match }) => <UserProfile userId={match.params.userId} />}
+        // 1/1/2020 - comment above does not match currently written code
         component={UserProfile}
       />{" "}
       {/* this pattern (render={...stuff}) for passing down route props more performant I believe? - supposed to prevent re-renders or something, a reference is below
@@ -33,6 +35,7 @@ const Routes = () => {
       https://www.robinwieruch.de/react-pass-props-to-component#pass-props-with-react-router
     */}
       <Route path="/tags" component={Test} />
+      <Route path="/transactions" component={TransactionsPage} />
     </Switch>
   );
 };

@@ -77,14 +77,23 @@ function transactionsUpdateBuilder(values, filterConfig = { filter: "" }) {
 
   return `UPDATE transactions SET ${setStatement} WHERE ${filterConfig.filter} = $${subParam};`;
 }
-console.log(
-  transactionsUpdateBuilder(
-    { description: "eater" },
-    { filter: "transactions.id" }
-  )
-);
+
+// expects a string
+// returns a number converted from a dollar amount to cents
+// input cases from front end:
+// input -> expected to mean -> db representation
+// 1 -> $1.00 -> 100
+// 0.01 -> $0.01 -> 1
+// 0.001 -> ??? should this be rounded to 0 or 1 cent? probably 1 cent since you wouldn't add zero dollar expenses here?
+function convertDollarsToCents(stringAmount) {
+  const numberAmount = parseInt(stringAmount);
+
+  return numberAmount * 100;
+}
+
 module.exports = {
   tagParser,
   insertTagQueryGenerator,
   transactionsUpdateBuilder,
+  convertDollarsToCents,
 };

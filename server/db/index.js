@@ -11,7 +11,7 @@ const connectConfig = {
   port: process.env.DB_PORT,
 };
 
-const client = new pg.Client(
+const client = new pg.Pool(
   isProduction ? process.env.DATABASE_URL : connectConfig
 );
 

@@ -34,7 +34,7 @@ router.get("/:transactionId", async (req, res, next) => {
 // add a new transaction for a user - feels weird/confusing to have the user's id be a query param, but maybe makes sense?
 // POST /api/transactions:someId would make me think something related to a recipe is being posted, but in fact it would be the transaction itself
 //
-router.post("/:userId");
+router.post("/users/:userId");
 
 // should this route be to add a tag to an existing transaction? Should there just be a route for updating a transaction in its entirety, rather than just
 // adding a tag?

@@ -1,7 +1,11 @@
 const router = require("express").Router();
 const client = require("../db");
 const extendedQueries = require("../queries");
-const { tagParser, insertTagQueryGenerator } = require("../../utils");
+const {
+  tagParser,
+  insertTagQueryGenerator,
+  convertDollarsToCents,
+} = require("../../utils");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -15,13 +19,17 @@ router.get("/", async (req, res, next) => {
 });
 
 //gets a user and all of their transactions
+// this could potentially be separated into route that only provides user data
+// and then /api/transactions/:userId
+// instead of getting user info + their transactions all in one route
+// especially if front end does not display user data and their transaction data in the same page (currently they are together, but could change)
 router.get("/:id", async (req, res, next) => {
   try {
     const userWithTransactions = await client.query(
       extendedQueries.userWithTransactionsNoTags,
       [req.params.id]
     );
-
+    console.log(userWithTransactions.rows[0]);
     if (!userWithTransactions.rows.length) {
       const new404 = new Error("User not found");
       new404.status = 404;
@@ -79,9 +87,13 @@ router.post("/", async (req, res, next) => {
 
 // posts a new transcation for a specific user, and includes tags - does not currently allow for posting a date
 // TODO: probably want to add some validation either on backend or frontend at some point
-router.post("/:id", async (req, res, next) => {
+router.post("/:userId", async (req, res, next) => {
   try {
-    const { description, amount, date, tags } = req.body;
+    let { description, amount, date, tags } = req.body; // by default, db sets date for new transaction by calling NOW()::DATE (timestamp casted to date)
+    // but want to allow a user to pick a date for a transaction as well when posting a new one
+    // likely scenario: include a date picker in front end that defaults to current day, and always send its value in body of request - insert the date
+    // into db. Current query for inserting new transaction (postNewUserTransaction) doesn't have field for inserting date, but this can be changed
+    // easily enough
 
     // request body comes in as {description: string, amount: string, tags: string, date: string}
     // amount needs to be parsed into a number and then multiplied by 100 to convert from dollars to cents
@@ -93,15 +105,26 @@ router.post("/:id", async (req, res, next) => {
 
     const { postNewUserTransaction, insertOrDoNothingTag } = extendedQueries;
 
+    // validate the date coming from form submission before trying to query db with it
+    // 12/30/2020 - for now, using this SO post: https://stackoverflow.com/questions/42876071/how-to-save-js-date-now-in-postgresql to create new date
+    // if req.body.date is an empty string
+    // ideally, would check to make sure date is defined, and then run additional validation in the "if" block
+    if (!date) {
+      // if date is an empty string
+      date = new Date().toISOString();
+    }
+    console.log("we got a date here...", date);
     // post transaction to transactions table
     // rows is an array that contains a single object with transaction's id, user_id, description, amount, and transaction_date
     const { rows } = await client.query(postNewUserTransaction, [
       description,
-      parseInt(amount * 100),
-      req.params.id,
+      convertDollarsToCents(amount),
+      req.params.userId,
+      date,
     ]);
 
     let [transactionResponse] = rows; // equivalent to accessing rows[0] and saving to a variable
+
     let transactionId = transactionResponse.id;
 
     // try to create every tag in the list in the database
@@ -152,7 +175,7 @@ router.post("/:id", async (req, res, next) => {
         idArray
       );
     }
-    console.log("transaction response...", transactionResponse);
+    console.log("and transaction response", transactionResponse);
     res.json(transactionResponse); //rewrite to send back newly created task or redirect to task list for user
   } catch (err) {
     next(err);

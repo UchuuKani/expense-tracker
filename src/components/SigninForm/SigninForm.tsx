@@ -23,7 +23,7 @@ const SigninForm: React.FC<RouteComponentProps> = ({ history }) => {
       });
 
       user.send({ type: LOGIN_EVENT, payload: { ...userData.data } });
-      history.push("/");
+      history.push("/transactions");
     } catch (err) {
       console.log("what is userData when incorrect password or email?", err);
       console.error(err);

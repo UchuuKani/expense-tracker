@@ -29,6 +29,7 @@ const AddTransaction: React.FunctionComponent<Props> = ({
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [tags, setTags] = useState("");
+  const [date, setDate] = useState("");
 
   // type the event, probably also want to render something if there is an error - not sure how to use useAxios here though
   // as hooks need to be called in the top level scope of a functional component but I want to only useAxios on submit - would
@@ -40,17 +41,19 @@ const AddTransaction: React.FunctionComponent<Props> = ({
         description,
         amount,
         tags,
+        date,
       });
-      console.log("the transaction", data);
+      console.log("why is the date fucked", date);
       setDescription("");
       setAmount("");
       setTags("");
+      setDate("");
       addNewTransaction(addTransactionCreator, data);
     } catch (e) {
       console.error(e);
     }
   };
-
+  console.log("the date", date);
   return (
     <form onSubmit={handleSubmit} className={styles["add-transaction"]}>
       <ul className="flex-outer">
@@ -77,6 +80,7 @@ const AddTransaction: React.FunctionComponent<Props> = ({
             type="text"
             name="transactionAmount"
             value={amount}
+            inputMode="decimal"
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               setAmount(event.target.value)
             }
@@ -97,6 +101,22 @@ const AddTransaction: React.FunctionComponent<Props> = ({
               setTags(event.target.value)
             }
             placeholder="Enter tags as a comma separated list"
+          ></input>
+        </li>
+        <li>
+          <label className="transaction-label" htmlFor="transaction-date">
+            Date
+          </label>
+          <input
+            className="transaction-input"
+            id="date-input"
+            type="date"
+            name="date-input"
+            value={date}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              setDate(event.target.value)
+            }
+            placeholder="Select a date from the date picker"
           ></input>
         </li>
         <li>
