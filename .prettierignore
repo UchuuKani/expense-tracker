@@ -1,0 +1,7 @@
+# Ignore artifacts (this was just copy-pasted in, don't think these directories even get created with my current setup):
+build
+coverage
+
+# Ignore all yaml/yml files:
+*.yaml
+*.yml
