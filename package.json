@@ -30,7 +30,7 @@
     "server": "node-env-run server --exec nodemon | pino-colada",
     "serverback": "nodemon server",
     "dev": "run-p serverback start",
-    "seed": "psql -d bill-tracker -a -f ./seed.sql"
+    "seed": "psql -d expense-tracker -a -f ./seed.sql"
   },
   "eslintConfig": {
     "extends": "react-app"
